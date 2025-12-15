@@ -1,1323 +1,1579 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 2 – How to Use AI to Make Your Game</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-        
-        .content {
-            padding: 40px;
-            min-height: 500px;
-            display: none;
-        }
-        
-        .content.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .content h2 {
-            color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 25px;
-        }
-        
-        .content p, .content li {
-            font-size: 1.05em;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        
-        .content ul {
-            margin-left: 25px;
-        }
-        
-        .content li {
-            margin-bottom: 12px;
-        }
-        
-        .highlight-box {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-        
-        .highlight-box strong {
-            color: #667eea;
-        }
-        
-        /* OBJECTIVES BOX */
-        .objectives-box {
-            background: #e8f0ff;
-            border: 2px solid #667eea;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 25px 0;
-        }
-        
-        .objectives-box h3 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-        
-        .objectives-box ul {
-            margin-left: 25px;
-        }
-        
-        .objectives-box li {
-            margin-bottom: 10px;
-        }
-        
-        /* FLIP CARDS */
-        .flip-cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .flip-card {
-            perspective: 1000px;
-            height: 280px;
-            cursor: pointer;
-        }
-        
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-        
-        .flip-card-front, .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        
-        .flip-card-front {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            font-size: 1.1em;
-        }
-        
-        .flip-card-back {
-            background: #f0f4ff;
-            color: #333;
-            font-size: 0.95em;
-            transform: rotateY(180deg);
-            line-height: 1.6;
-        }
-        
-        .flip-hint {
-            font-size: 0.75em;
-            opacity: 0.8;
-            margin-top: 15px;
-            font-weight: normal;
-        }
-        
-        /* ACCORDION */
-        .accordion {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .accordion-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .accordion-item:last-child {
-            border-bottom: none;
-        }
-        
-        .accordion-header {
-            background: #f9f9f9;
-            padding: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #667eea;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s;
-        }
-        
-        .accordion-header:hover {
-            background: #f0f4ff;
-        }
-        
-        .accordion-icon {
-            font-size: 1.2em;
-            transition: transform 0.3s;
-        }
-        
-        .accordion-item.active .accordion-icon {
-            transform: rotate(180deg);
-        }
-        
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .accordion-item.active .accordion-content {
-            max-height: 800px;
-        }
-        
-        .accordion-content p {
-            padding: 15px 15px;
-            margin-bottom: 0;
-            font-size: 0.95em;
-            line-height: 1.8;
-            color: #333;
-        }
-        
-        .accordion-content p:first-child {
-            padding-top: 15px;
-        }
-        
-        .accordion-content p:last-child {
-            padding-bottom: 15px;
-        }
-        
-        .accordion-content strong {
-            color: #667eea;
-        }
-        
-        /* CODE BLOCK */
-        .code-block {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 6px;
-            overflow-x: auto;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-        
-        /* WORKFLOW STEPS */
-        .workflow-steps {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .workflow-step {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .workflow-step:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .workflow-step strong {
-            color: #667eea;
-            font-size: 1.1em;
-        }
-        
-        /* ASSET SECTION */
-        .asset-section {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #667eea;
-        }
-        
-        .asset-section h4 {
-            color: #667eea;
-            margin-bottom: 12px;
-            font-size: 1.1em;
-        }
-        
-        .asset-section p {
-            margin-bottom: 8px;
-            font-size: 1em;
-        }
-        
-        .asset-section a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        
-        .asset-section a:hover {
-            text-decoration: underline;
-        }
-        
-        /* FOLDER STRUCTURE */
-        .folder-structure {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.8;
-            overflow-x: auto;
-            white-space: pre;
-        }
-        
-        /* TABS */
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 12px 20px;
-            color: #667eea;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1em;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-        }
-        
-        .tab-btn.active {
-            border-bottom-color: #667eea;
-            color: #667eea;
-        }
-        
-        .tab-btn:hover {
-            color: #764ba2;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* NOTE BOX */
-        .note-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-        
-        .note-box strong {
-            color: #ff9800;
-        }
-        
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .modal-content h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-        
-        .modal-content p, .modal-content ul {
-            margin-bottom: 15px;
-            line-height: 1.8;
-            font-size: 1em;
-            color: #333;
-        }
-        
-        .modal-content ul {
-            margin-left: 20px;
-        }
-        
-        .close-btn {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            color: #667eea;
-            cursor: pointer;
-            border: none;
-            background: none;
-            padding: 0;
-            margin: -10px 0 0 0;
-        }
-        
-        .close-btn:hover {
-            color: #764ba2;
-        }
-        
-        /* INFO BUTTON */
-        .info-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            margin-left: 10px;
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-        
-        .info-btn:hover {
-            background: #764ba2;
-        }
-        
-        .info-button-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        /* CAROUSEL */
-        .carousel-container {
-            margin: 30px 0;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        
-        .carousel-card {
-            display: none;
-            padding: 25px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #667eea;
-        }
-        
-        .carousel-card.active {
-            display: block;
-        }
-        
-        .carousel-card h3 {
-            color: #667eea;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-        }
-        
-        .carousel-card .prompt-item {
-            margin: 15px 0;
-            padding: 15px;
-            background: #f0f4ff;
-            border-radius: 4px;
-        }
-        
-        .carousel-card .prompt-item strong {
-            color: #667eea;
-            display: block;
-            margin-bottom: 8px;
-        }
-        
-        .carousel-card .result-text {
-            margin: 15px 0;
-            padding: 15px;
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            border-radius: 4px;
-            color: #333;
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-        
-        .carousel-result-label {
-            color: #2196f3;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-        
-        .carousel-controls button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.95em;
-            transition: background 0.2s;
-        }
-        
-        .carousel-controls button:hover {
-            background: #764ba2;
-        }
-        
-        .carousel-controls span {
-            color: #667eea;
-            font-weight: bold;
-        }
-        
-        /* REAL EXAMPLE BOX */
-        .real-example {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-        
-        .real-example h4 {
-            color: #2196f3;
-            margin-bottom: 15px;
-        }
-        
-        .example-prompt {
-            background: white;
-            border: 1px solid #2196f3;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 4px;
-            font-size: 0.95em;
-        }
-        
-        .example-prompt strong {
-            color: #2196f3;
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        /* NAVIGATION */
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            padding: 30px 40px;
-            background: #f9f9f9;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        .nav-buttons button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        
-        .nav-buttons button:hover {
-            background: #764ba2;
-        }
-        
-        .nav-buttons button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        .nav-buttons a.button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.2s;
-            text-decoration: none;
-            text-align: center;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .nav-buttons a.button:hover {
-            background: #764ba2;
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 40px;
+        min-height: 500px;
+        display: none;
+      }
+
+      .content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
         }
-        
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #e0e0e0;
-            position: relative;
+        to {
+          opacity: 1;
         }
-        
-        .progress-fill {
-            height: 100%;
-            background: #667eea;
-            transition: width 0.3s;
+      }
+
+      .content h2 {
+        color: #667eea;
+        font-size: 1.8em;
+        margin-bottom: 25px;
+      }
+
+      .content p,
+      .content li {
+        font-size: 1.05em;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .content ul {
+        margin-left: 25px;
+      }
+
+      .content li {
+        margin-bottom: 12px;
+      }
+
+      .highlight-box {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+      }
+
+      .highlight-box strong {
+        color: #667eea;
+      }
+
+      /* OBJECTIVES BOX */
+      .objectives-box {
+        background: #e8f0ff;
+        border: 2px solid #667eea;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 25px 0;
+      }
+
+      .objectives-box h3 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.2em;
+      }
+
+      .objectives-box ul {
+        margin-left: 25px;
+      }
+
+      .objectives-box li {
+        margin-bottom: 10px;
+      }
+
+      /* FLIP CARDS */
+      .flip-cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+      }
+
+      .flip-card {
+        perspective: 1000px;
+        height: 280px;
+        cursor: pointer;
+      }
+
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .flip-card-front,
+      .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+
+      .flip-card-front {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 1.1em;
+      }
+
+      .flip-card-back {
+        background: #f0f4ff;
+        color: #333;
+        font-size: 0.95em;
+        transform: rotateY(180deg);
+        line-height: 1.6;
+      }
+
+      .flip-hint {
+        font-size: 0.75em;
+        opacity: 0.8;
+        margin-top: 15px;
+        font-weight: normal;
+      }
+
+      /* ACCORDION */
+      .accordion {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+
+      .accordion-item {
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .accordion-item:last-child {
+        border-bottom: none;
+      }
+
+      .accordion-header {
+        background: #f9f9f9;
+        padding: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #667eea;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s;
+      }
+
+      .accordion-header:hover {
+        background: #f0f4ff;
+      }
+
+      .accordion-icon {
+        font-size: 1.2em;
+        transition: transform 0.3s;
+      }
+
+      .accordion-item.active .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 800px;
+      }
+
+      .accordion-content p {
+        padding: 15px 15px;
+        margin-bottom: 0;
+        font-size: 0.95em;
+        line-height: 1.8;
+        color: #333;
+      }
+
+      .accordion-content p:first-child {
+        padding-top: 15px;
+      }
+
+      .accordion-content p:last-child {
+        padding-bottom: 15px;
+      }
+
+      .accordion-content strong {
+        color: #667eea;
+      }
+
+      /* CODE BLOCK */
+      .code-block {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 6px;
+        overflow-x: auto;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        line-height: 1.5;
+      }
+
+      /* WORKFLOW STEPS */
+      .workflow-steps {
+        background: #f9f9f9;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .workflow-step {
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .workflow-step:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .workflow-step strong {
+        color: #667eea;
+        font-size: 1.1em;
+      }
+
+      /* ASSET SECTION */
+      .asset-section {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border-left: 4px solid #667eea;
+      }
+
+      .asset-section h4 {
+        color: #667eea;
+        margin-bottom: 12px;
+        font-size: 1.1em;
+      }
+
+      .asset-section p {
+        margin-bottom: 8px;
+        font-size: 1em;
+      }
+
+      .asset-section a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .asset-section a:hover {
+        text-decoration: underline;
+      }
+
+      /* FOLDER STRUCTURE */
+      .folder-structure {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 6px;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        line-height: 1.8;
+        overflow-x: auto;
+        white-space: pre;
+      }
+
+      /* TABS */
+      .tab-buttons {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      .tab-btn {
+        background: none;
+        border: none;
+        padding: 12px 20px;
+        color: #667eea;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1em;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .tab-btn.active {
+        border-bottom-color: #667eea;
+        color: #667eea;
+      }
+
+      .tab-btn:hover {
+        color: #764ba2;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      /* NOTE BOX */
+      .note-box {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+      }
+
+      .note-box strong {
+        color: #ff9800;
+      }
+
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 40px;
+        border-radius: 12px;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
         }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-content h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .modal-content p,
+      .modal-content ul {
+        margin-bottom: 15px;
+        line-height: 1.8;
+        font-size: 1em;
+        color: #333;
+      }
+
+      .modal-content ul {
+        margin-left: 20px;
+      }
+
+      .close-btn {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        color: #667eea;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: -10px 0 0 0;
+      }
+
+      .close-btn:hover {
+        color: #764ba2;
+      }
+
+      /* INFO BUTTON */
+      .info-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-left: 10px;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .info-btn:hover {
+        background: #764ba2;
+      }
+
+      .info-button-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      /* CAROUSEL */
+      .carousel-container {
+        margin: 30px 0;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+      }
+
+      .carousel-card {
+        display: none;
+        padding: 25px;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid #667eea;
+      }
+
+      .carousel-card.active {
+        display: block;
+      }
+
+      .carousel-card h3 {
+        color: #667eea;
+        font-size: 1.3em;
+        margin-bottom: 15px;
+      }
+
+      .carousel-card .prompt-item {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f0f4ff;
+        border-radius: 4px;
+      }
+
+      .carousel-card .prompt-item strong {
+        color: #667eea;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .carousel-card .result-text {
+        margin: 15px 0;
+        padding: 15px;
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        border-radius: 4px;
+        color: #333;
+        font-size: 0.95em;
+        line-height: 1.6;
+      }
+
+      .carousel-result-label {
+        color: #2196f3;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .carousel-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+      }
+
+      .carousel-controls button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95em;
+        transition: background 0.2s;
+      }
+
+      .carousel-controls button:hover {
+        background: #764ba2;
+      }
+
+      .carousel-controls span {
+        color: #667eea;
+        font-weight: bold;
+      }
+
+      /* REAL EXAMPLE BOX */
+      .real-example {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+      }
+
+      .real-example h4 {
+        color: #2196f3;
+        margin-bottom: 15px;
+      }
+
+      .example-prompt {
+        background: white;
+        border: 1px solid #2196f3;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        font-size: 0.95em;
+      }
+
+      .example-prompt strong {
+        color: #2196f3;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      /* NAVIGATION */
+      .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px 40px;
+        background: #f9f9f9;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .nav-buttons button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background 0.2s;
+      }
+
+      .nav-buttons button:hover {
+        background: #764ba2;
+      }
+
+      .nav-buttons button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .nav-buttons a.button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background 0.2s;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .nav-buttons a.button:hover {
+        background: #764ba2;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        position: relative;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: #667eea;
+        transition: width 0.3s;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 12.5%"></div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 12.5%"></div>
+      </div>
+
+      <div class="header">
+        <h1>How to Use AI to Make Your Game</h1>
+        <p>
+          From prompt to playable in minutes. Learn the workflow professionals
+          use.
+        </p>
+      </div>
+
+      <!-- PAGE 1: Title + Learning Objectives -->
+      <div class="content active">
+        <h2>Welcome to Module 2</h2>
+        <p>
+          Module 1 taught you the fundamentals of game design. Now it's time to
+          build.
+        </p>
+        <p>
+          This module shows you exactly how AI fits into the development
+          process—and how to use it to iterate fast without getting stuck.
+        </p>
+
+        <div class="objectives-box">
+          <h3>By the end of this module, you'll understand:</h3>
+          <ul>
+            <li>How to start with a single .HTML file and run it instantly</li>
+            <li>The rapid iteration workflow: ask → code → test → refine</li>
+            <li>Common pitfalls to avoid when prompting AI for code</li>
+            <li>
+              Where to find free assets (sounds, music, graphics, sprites, UI)
+            </li>
+            <li>How to organize your game as it grows</li>
+            <li>How to share your finished game on itch.io</li>
+          </ul>
         </div>
-        
-        <div class="header">
-            <h1>How to Use AI to Make Your Game</h1>
-            <p>From prompt to playable in minutes. Learn the workflow professionals use.</p>
+
+        <p style="margin-top: 30px; font-size: 1.1em">
+          Ready? Let's build something real.
+        </p>
+      </div>
+
+      <!-- PAGE 2: Start Simple: The Single .HTML File -->
+      <div class="content">
+        <h2>Start Simple: The Single .HTML File</h2>
+        <p>
+          Before you worry about folders, version control, or IDEs—you need to
+          understand the simplest possible setup.
+        </p>
+        <p>
+          Everything you build at first lives in <strong>one file</strong>:
+          <code>game.html</code>
+        </p>
+
+        <div class="info-button-group">
+          <p><strong>Why One File?</strong></p>
+          <button class="info-btn" onclick="openModal('modal-why-one-file')">
+            Learn More
+          </button>
         </div>
-        
-        <!-- PAGE 1: Title + Learning Objectives -->
-        <div class="content active">
-            <h2>Welcome to Module 2</h2>
-            <p>Module 1 taught you the fundamentals of game design. Now it's time to build.</p>
-            <p>This module shows you exactly how AI fits into the development process—and how to use it to iterate fast without getting stuck.</p>
-            
-            <div class="objectives-box">
-                <h3>By the end of this module, you'll understand:</h3>
-                <ul>
-                    <li>How to start with a single .HTML file and run it instantly</li>
-                    <li>The rapid iteration workflow: ask → code → test → refine</li>
-                    <li>Common pitfalls to avoid when prompting AI for code</li>
-                    <li>Where to find free assets (sounds, music, graphics, sprites, UI)</li>
-                    <li>How to organize your game as it grows</li>
-                    <li>How to share your finished game on itch.io</li>
-                </ul>
-            </div>
-            
-            <p style="margin-top: 30px; font-size: 1.1em;">Ready? Let's build something real.</p>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          How to Run It:
+        </h3>
+        <div class="workflow-steps">
+          <div class="workflow-step">
+            <strong>1. Ask the AI</strong><br />
+            Create a complete HTML5 game with your idea
+          </div>
+          <div class="workflow-step">
+            <strong>2. Copy the response</strong><br />
+            Select all the code the AI gives you
+          </div>
+          <div class="workflow-step">
+            <strong>3. Paste into a text editor</strong><br />
+            Notepad, VS Code, or any text editor works
+          </div>
+          <div class="workflow-step">
+            <strong>4. Save as game.html</strong><br />
+            Make sure the file ends with .html
+          </div>
+          <div class="workflow-step">
+            <strong>5. Double-click the file</strong><br />
+            It opens in your browser automatically
+          </div>
+          <div class="workflow-step">
+            <strong>6. Play it immediately</strong><br />
+            No server. No waiting. No complexity.
+          </div>
         </div>
-        
-        <!-- PAGE 2: Start Simple: The Single .HTML File -->
-        <div class="content">
-            <h2>Start Simple: The Single .HTML File</h2>
-            <p>Before you worry about folders, version control, or IDEs—you need to understand the simplest possible setup.</p>
-            <p>Everything you build at first lives in <strong>one file</strong>: <code>game.html</code></p>
-            
-            <div class="info-button-group">
-                <p><strong>Why One File?</strong></p>
-                <button class="info-btn" onclick="openModal('modal-why-one-file')">Learn More</button>
-            </div>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">How to Run It:</h3>
-            <div class="workflow-steps">
-                <div class="workflow-step">
-                    <strong>1. Ask the AI</strong><br>
-                    Create a complete HTML5 game with your idea
-                </div>
-                <div class="workflow-step">
-                    <strong>2. Copy the response</strong><br>
-                    Select all the code the AI gives you
-                </div>
-                <div class="workflow-step">
-                    <strong>3. Paste into a text editor</strong><br>
-                    Notepad, VS Code, or any text editor works
-                </div>
-                <div class="workflow-step">
-                    <strong>4. Save as game.html</strong><br>
-                    Make sure the file ends with .html
-                </div>
-                <div class="workflow-step">
-                    <strong>5. Double-click the file</strong><br>
-                    It opens in your browser automatically
-                </div>
-                <div class="workflow-step">
-                    <strong>6. Play it immediately</strong><br>
-                    No server. No waiting. No complexity.
-                </div>
-            </div>
-            
-            <div class="highlight-box">
-                <p><strong>Example:</strong> If you ask the AI "Make a clicking game where you click a big donut to earn points," it gives you back one complete HTML file with all CSS and JavaScript built-in. You copy, save, open. Done.</p>
-                <div style="margin-top: 15px;">
-                    <button class="info-btn" onclick="openModal('modal-start-simple')" style="margin-left: 0;">More Details →</button>
-                </div>
-            </div>
+
+        <div class="highlight-box">
+          <p>
+            <strong>Example:</strong> If you ask the AI "Make a clicking game
+            where you click a big donut to earn points," it gives you back one
+            complete HTML file with all CSS and JavaScript built-in. You copy,
+            save, open. Done.
+          </p>
+          <div style="margin-top: 15px">
+            <button
+              class="info-btn"
+              onclick="openModal('modal-start-simple')"
+              style="margin-left: 0"
+            >
+              More Details →
+            </button>
+          </div>
         </div>
-        
-        <!-- Modal: Why One File -->
-        <div class="modal" id="modal-why-one-file">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-why-one-file')">&times;</button>
-                <h2>Why One File?</h2>
-                <ul>
-                    <li>No setup required. No build process. No headaches.</li>
-                    <li>You can open it directly in your browser (just double-click it)</li>
-                    <li>You can share it instantly (email it, upload it, paste it)</li>
-                    <li>The AI can generate the entire thing at once</li>
-                </ul>
-            </div>
+      </div>
+
+      <!-- Modal: Why One File -->
+      <div class="modal" id="modal-why-one-file">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-why-one-file')">
+            &times;
+          </button>
+          <h2>Why One File?</h2>
+          <ul>
+            <li>No setup required. No build process. No headaches.</li>
+            <li>
+              You can open it directly in your browser (just double-click it)
+            </li>
+            <li>You can share it instantly (email it, upload it, paste it)</li>
+            <li>The AI can generate the entire thing at once</li>
+          </ul>
         </div>
-        
-        <!-- Modal: Start Simple Foundation -->
-        <div class="modal" id="modal-start-simple">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-start-simple')">&times;</button>
-                <h2>The Foundation</h2>
-                <p><strong>This is the entire development loop at first:</strong> ask → receive → open → play.</p>
-                <p>Everything else you learn—folders, version control, advanced tools—builds on this foundation. But you don't need any of it to make a real, playable game.</p>
-                <p>Start here. Master this. Then expand.</p>
-            </div>
+      </div>
+
+      <!-- Modal: Start Simple Foundation -->
+      <div class="modal" id="modal-start-simple">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-start-simple')">
+            &times;
+          </button>
+          <h2>The Foundation</h2>
+          <p>
+            <strong>This is the entire development loop at first:</strong> ask →
+            receive → open → play.
+          </p>
+          <p>
+            Everything else you learn—folders, version control, advanced
+            tools—builds on this foundation. But you don't need any of it to
+            make a real, playable game.
+          </p>
+          <p>Start here. Master this. Then expand.</p>
         </div>
-        
-        <!-- PAGE 3: Rapid Iteration Workflow -->
-        <div class="content">
-            <h2>The Rapid Iteration Workflow</h2>
-            <p>The real power of AI isn't getting one perfect game—it's getting something playable, then refining it in seconds.</p>
-            
+      </div>
+
+      <!-- PAGE 3: Rapid Iteration Workflow -->
+      <div class="content">
+        <h2>The Rapid Iteration Workflow</h2>
+        <p>
+          The real power of AI isn't getting one perfect game—it's getting
+          something playable, then refining it in seconds.
+        </p>
+
             <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">The Loop:</h3>
-            <div class="workflow-steps">
-                <div class="workflow-step">
-                    <strong>1. Ask</strong> — Give the AI a clear prompt with your game idea
-                </div>
-                <div class="workflow-step">
-                    <strong>2. Receive</strong> — Copy the complete HTML file
-                </div>
-                <div class="workflow-step">
-                    <strong>3. Test</strong> — Open it, play it, notice what feels wrong
-                </div>
-                <div class="workflow-step">
-                    <strong>4. Refine</strong> — Tell the AI exactly what to fix
-                </div>
-                <div class="workflow-step">
-                    <strong>5. Repeat</strong> — Back to step 2 (usually 3-5 times per game)
-                </div>
+            <img src="images/the-loop.jpg" alt="The Loop" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          🎮 Real Example: The Mushroom Clicker
+        </h3>
+        <p>
+          Click through the four prompts to see how a game evolves in 5 minutes:
+        </p>
+
+        <div class="carousel-container">
+          <div class="carousel-card active">
+            <h3>Prompt 1</h3>
+            <div class="prompt-item">
+              <strong>First Prompt:</strong>
+              "Make a clicker game where you click mushrooms to earn points.
+              Include a score counter and a game-over state when you've clicked
+              50 times."
             </div>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">🎮 Real Example: The Mushroom Clicker</h3>
-            <p>Click through the four prompts to see how a game evolves in 5 minutes:</p>
-            
-            <div class="carousel-container">
-                <div class="carousel-card active">
-                    <h3>Prompt 1</h3>
-                    <div class="prompt-item">
-                        <strong>First Prompt:</strong>
-                        "Make a clicker game where you click mushrooms to earn points. Include a score counter and a game-over state when you've clicked 50 times."
-                    </div>
-                    <div class="result-text">
-                        <span class="carousel-result-label">Result:</span>
-                        You get a working game. It works, but the mushrooms don't move around—they're in the same spot every time. Boring.
-                    </div>
-                </div>
-                
-                <div class="carousel-card">
-                    <h3>Prompt 2</h3>
-                    <div class="prompt-item">
-                        <strong>Follow-Up Prompt:</strong>
-                        "Make the mushrooms appear in random positions each time the player clicks one. Also make them bigger and add a visual effect when you click."
-                    </div>
-                    <div class="result-text">
-                        <span class="carousel-result-label">Result:</span>
-                        Now it's more fun. But it's too easy. You're clicking mushrooms faster than they appear.
-                    </div>
-                </div>
-                
-                <div class="carousel-card">
-                    <h3>Prompt 3</h3>
-                    <div class="prompt-item">
-                        <strong>Next Prompt:</strong>
-                        "Increase the spawn rate so new mushrooms appear faster. Make the game slightly harder by adding a time limit—the player has 30 seconds."
-                    </div>
-                    <div class="result-text">
-                        <span class="carousel-result-label">Result:</span>
-                        Better. But now you realize there's no feedback when time runs out. One more fix needed.
-                    </div>
-                </div>
-                
-                <div class="carousel-card">
-                    <h3>Prompt 4 - Done!</h3>
-                    <div class="prompt-item">
-                        <strong>Final Prompt:</strong>
-                        "When the time runs out, show a big 'GAME OVER' message with the final score. Add a restart button."
-                    </div>
-                    <div class="result-text">
-                        <span class="carousel-result-label">Result:</span>
-                        Done. Four prompts. Five minutes. A polished, playable clicker game.
-                    </div>
-                </div>
-                
-                <div class="carousel-controls">
-                    <button onclick="carouselPrev()">← Previous</button>
-                    <span id="carousel-counter">1 / 4</span>
-                    <button onclick="carouselNext()">Next →</button>
-                </div>
+            <div class="result-text">
+              <span class="carousel-result-label">Result:</span>
+              You get a working game. It works, but the mushrooms don't move
+              around—they're in the same spot every time. Boring.
             </div>
-            
-            <div class="info-button-group">
-                <p><strong>Why This Works:</strong></p>
-                <button class="info-btn" onclick="openModal('modal-key-insight')" style="margin-left: 0;">See Key Insight →</button>
+          </div>
+
+          <div class="carousel-card">
+            <h3>Prompt 2</h3>
+            <div class="prompt-item">
+              <strong>Follow-Up Prompt:</strong>
+              "Make the mushrooms appear in random positions each time the
+              player clicks one. Also make them bigger and add a visual effect
+              when you click."
             </div>
+            <div class="result-text">
+              <span class="carousel-result-label">Result:</span>
+              Now it's more fun. But it's too easy. You're clicking mushrooms
+              faster than they appear.
+            </div>
+          </div>
+
+          <div class="carousel-card">
+            <h3>Prompt 3</h3>
+            <div class="prompt-item">
+              <strong>Next Prompt:</strong>
+              "Increase the spawn rate so new mushrooms appear faster. Make the
+              game slightly harder by adding a time limit—the player has 30
+              seconds."
+            </div>
+            <div class="result-text">
+              <span class="carousel-result-label">Result:</span>
+              Better. But now you realize there's no feedback when time runs
+              out. One more fix needed.
+            </div>
+          </div>
+
+          <div class="carousel-card">
+            <h3>Prompt 4 - Done!</h3>
+            <div class="prompt-item">
+              <strong>Final Prompt:</strong>
+              "When the time runs out, show a big 'GAME OVER' message with the
+              final score. Add a restart button."
+            </div>
+            <div class="result-text">
+              <span class="carousel-result-label">Result:</span>
+              Done. Four prompts. Five minutes. A playable clicker game.
+            </div>
+          </div>
+
+          <div class="carousel-controls">
+            <button onclick="carouselPrev()">← Previous</button>
+            <span id="carousel-counter">1 / 4</span>
+            <button onclick="carouselNext()">Next →</button>
+          </div>
         </div>
-        
-        <!-- Modal: Key Insight -->
-        <div class="modal" id="modal-key-insight">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-key-insight')">&times;</button>
-                <h2>The Key Insight</h2>
-                <p>You're not asking the AI to rebuild the game each time. You're asking it to fix <strong>one specific thing</strong>.</p>
-                <p style="margin-top: 15px;">This is fast and keeps the AI from breaking what already works.</p>
-                <p style="margin-top: 15px;">Surgical fixes. Focused iterations. That's how you go from "nothing" to "polished" in minutes.</p>
-            </div>
+
+        <div class="info-button-group">
+          <p><strong>Why This Works:</strong></p>
+          <button
+            class="info-btn"
+            onclick="openModal('modal-key-insight')"
+            style="margin-left: 0"
+          >
+            See Key Insight →
+          </button>
         </div>
-        
-        <!-- PAGE 4: Common Pitfalls (Flip Cards) -->
-        <div class="content">
-            <h2>Common Pitfalls to Avoid</h2>
-            <p>Here are three things beginners do that waste time. Learn them now, save yourself hours. Click each card to see the better approach:</p>
-            
-            <div class="flip-cards-container">
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            ❌ "Rewrite my entire game with this new feature"
-                            <div class="flip-hint">Click to flip</div>
-                        </div>
-                        <div class="flip-card-back">
-                            ✅ "Add a pause button. When the player presses P, the game pauses and shows 'PAUSED'. Press P again to resume."
-                            <br><br>
-                            <strong>Why:</strong> Asking for a complete rewrite risks breaking things that already work. Be surgical.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            ❌ "Make my game better and more fun"
-                            <div class="flip-hint">Click to flip</div>
-                        </div>
-                        <div class="flip-card-back">
-                            ✅ "The game feels too easy. Make enemies spawn twice as fast and move 20% faster."
-                            <br><br>
-                            <strong>Why:</strong> "Better" is vague. The AI doesn't know if you mean faster, harder, prettier, or more exciting. Be specific.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="flip-card">
-                    <div class="flip-card-inner">
-                        <div class="flip-card-front">
-                            ❌ "Fix the bugs"
-                            <div class="flip-hint">Click to flip</div>
-                        </div>
-                        <div class="flip-card-back">
-                            ✅ "When I click on the enemy, it doesn't disappear. The hitbox seems too small. Make enemies bigger and increase the click area."
-                            <br><br>
-                            <strong>Why:</strong> Describe what's broken in detail. The AI needs the full picture.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="highlight-box">
-                <p><strong>The best prompts are specific, surgical, and focused on one problem at a time.</strong> Vague = wasted time. Surgical fixes = fast progress.</p>
-            </div>
+      </div>
+
+      <!-- Modal: Key Insight -->
+      <div class="modal" id="modal-key-insight">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-key-insight')">
+            &times;
+          </button>
+          <h2>The Key Insight</h2>
+          <p>
+            You're not asking the AI to rebuild the game each time. You're
+            asking it to fix <strong>one specific thing</strong>.
+          </p>
+          <p style="margin-top: 15px">
+            This is fast and keeps the AI from breaking what already works.
+          </p>
+          <p style="margin-top: 15px">
+            Surgical fixes. Focused iterations. That's how you go from "nothing"
+            to "polished" in minutes.
+          </p>
         </div>
-        
-        <!-- PAGE 5: Getting Assets -->
-        <div class="content">
-            <h2>Getting Assets (Sound, Music, Graphics, Sprites, UI)</h2>
-            <p>A single .HTML file is great for starting, but real games need sounds, music, and visuals. Here's where to get them—all free.</p>
-            
-            <div class="accordion">
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        🎵 Background Music
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Where:</strong> <a href="https://suno.ai" target="_blank">Suno.ai</a> or similar AI music generators</p>
-                        <p><strong>How:</strong> Describe the mood ("upbeat 8-bit chiptune" or "calm ambient music") and let the AI generate it</p>
-                        <p><strong>Format:</strong> MP3 or WAV</p>
-                        <p><strong>Tip:</strong> Generate 30-60 seconds of looping music. Short loops = small file size</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        🔊 Sound Effects
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Where:</strong> <a href="https://freesound.org/" target="_blank">Freesound.org</a></p>
-                        <p><strong>How:</strong> Search for what you need ("coin sound," "explosion," "click")</p>
-                        <p><strong>Format:</strong> WAV or MP3</p>
-                        <p><strong>Tip:</strong> Most sound effects are 0.5-3 seconds. Download the shortest one you find</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        🎨 Graphics & Sprites
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Where:</strong> <a href="https://itch.io/game-assets/free" target="_blank">itch.io/game-assets/free</a> has massive free packs</p>
-                        <p><strong>How:</strong> Search for your game style (pixel art, cartoon, minimalist, etc.) and download packs</p>
-                        <p><strong>Format:</strong> PNG (best for transparency) or JPG</p>
-                        <p><strong>Tip:</strong> Look for "sprite sheets" if you need animated characters</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        🤖 Generated Graphics
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Where:</strong> ChatGPT, Claude, Bing Image Creator, or similar AI tools</p>
-                        <p><strong>How:</strong> Describe what you want ("a happy mushroom character, pixel art style") and download the image</p>
-                        <p><strong>Format:</strong> PNG preferred (keeps transparency)</p>
-                        <p><strong>Tip:</strong> AI-generated graphics are fast but may need tweaking. Use them as a starting point</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        🎮 UI Elements (Buttons, Menus, Borders)
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Where:</strong> itch.io asset packs OR generate them with AI</p>
-                        <p><strong>How:</strong> Search for "UI pack" or ask an AI to generate buttons/menus</p>
-                        <p><strong>Format:</strong> PNG</p>
-                        <p><strong>Tip:</strong> Consistent UI makes games feel professional. Pick one style and stick with it</p>
-                    </div>
-                </div>
+      </div>
+
+      <!-- PAGE 4: Common Pitfalls (Flip Cards) -->
+      <div class="content">
+        <h2>Common Pitfalls to Avoid</h2>
+        <p>
+          Here are three things beginners do that waste time. Learn them now,
+          save yourself hours. Click each card to see the better approach:
+        </p>
+
+        <div class="flip-cards-container">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                ❌ "Rewrite my entire game with this new feature"
+                <div class="flip-hint">Click to flip</div>
+              </div>
+              <div class="flip-card-back">
+                ✅ "Add a pause button. When the player presses P, the game
+                pauses and shows 'PAUSED'. Press P again to resume."
+                <br /><br />
+                <strong>Why:</strong> Asking for a complete rewrite risks
+                breaking things that already work. Be surgical.
+              </div>
             </div>
-            
-            <div class="highlight-box">
-                <p><strong>Start with free assets.</strong> Once your game is polished and you know what you need, you can commission custom art. For now, good-enough assets let you focus on gameplay.</p>
+          </div>
+
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                ❌ "Make my game better and more fun"
+                <div class="flip-hint">Click to flip</div>
+              </div>
+              <div class="flip-card-back">
+                ✅ "The game feels too easy. Make enemies spawn twice as fast
+                and move 20% faster."
+                <br /><br />
+                <strong>Why:</strong> "Better" is vague. The AI doesn't know if
+                you mean faster, harder, prettier, or more exciting. Be
+                specific.
+              </div>
             </div>
+          </div>
+
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                ❌ "Fix the bugs"
+                <div class="flip-hint">Click to flip</div>
+              </div>
+              <div class="flip-card-back">
+                ✅ "When I click on the enemy, it doesn't disappear. The hitbox
+                seems too small. Make enemies bigger and increase the click
+                area."
+                <br /><br />
+                <strong>Why:</strong> Describe what's broken in detail. The AI
+                needs the full picture.
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <!-- PAGE 6: Organizing Your Game -->
-        <div class="content">
-            <h2>Organizing Your Game: From .HTML to Folders</h2>
-            <p>Your first game lives in one .HTML file. But as you add sounds, graphics, and code, you need organization.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">Here's the structure:</h3>
-            
-            <div class="folder-structure">my-game/
-├── index.html
-├── sounds/
-│   ├── coin.mp3
-│   ├── explosion.mp3
-│   └── click.wav
-├── music/
-│   └── background-music.mp3
-├── images/
-│   ├── player.png
-│   ├── enemy.png
-│   └── background.png
-├── sprites/
-│   ├── character-walk.png
-│   └── explosion-animation.png
-└── ui/
-    ├── button.png
-    └── border.png</div>
-            
-            <div class="info-button-group">
-                <p><strong>Why This Structure?</strong></p>
-                <button class="info-btn" onclick="openModal('modal-why-structure')" style="margin-left: 0;">Learn More →</button>
-            </div>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">How to Set It Up:</h3>
-            <div class="workflow-steps">
-                <div class="workflow-step">
-                    Create a new folder called <strong>my-game</strong>
-                </div>
-                <div class="workflow-step">
-                    Inside, create subfolders: <strong>sounds</strong>, <strong>music</strong>, <strong>images</strong>, <strong>sprites</strong>, <strong>ui</strong>
-                </div>
-                <div class="workflow-step">
-                    Put your <strong>index.html</strong> file in the root (the main my-game folder)
-                </div>
-                <div class="workflow-step">
-                    Drag asset files into their matching folders
-                </div>
-                <div class="workflow-step">
-                    In your HTML, reference files like: <code>&lt;img src="images/player.png"&gt;</code>
-                </div>
-            </div>
-            
-            <div class="info-button-group">
-                <p><strong>📌 File Size Limits</strong></p>
-                <button class="info-btn" onclick="openModal('modal-file-size')" style="margin-left: 0;">Details →</button>
-            </div>
+
+        <div class="highlight-box">
+          <p>
+            <strong
+              >The best prompts are specific, surgical, and focused on one
+              problem at a time.</strong
+            >
+            Vague = wasted time. Surgical fixes = fast progress.
+          </p>
         </div>
-        
-        <!-- Modal: Why This Structure -->
-        <div class="modal" id="modal-why-structure">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-why-structure')">&times;</button>
-                <h2>Why This Structure?</h2>
-                <ul>
-                    <li><strong>Easy to find things</strong> — Need to change a sound? It's in sounds/</li>
-                    <li><strong>Easy to share</strong> — Zip the entire folder and upload to itch.io</li>
-                    <li><strong>Scalable</strong> — As your game grows, you add folders, not chaos</li>
-                    <li><strong>Professional</strong> — This is how real developers organize games</li>
-                </ul>
+      </div>
+
+      <!-- PAGE 5: Getting Assets -->
+      <div class="content">
+        <h2>Getting Assets (Sound, Music, Graphics, Sprites, UI)</h2>
+        <p>
+          A single .HTML file is great for starting, but real games need sounds,
+          music, and visuals. Here's where to get them—all free.
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              🎵 Background Music
+              <span class="accordion-icon">▼</span>
             </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Where:</strong>
+                <a href="https://suno.ai" target="_blank">Suno.ai</a> or similar
+                AI music generators
+              </p>
+              <p>
+                <strong>How:</strong> Describe the mood ("upbeat 8-bit chiptune"
+                or "calm ambient music") and let the AI generate it
+              </p>
+              <p><strong>Format:</strong> MP3 or WAV</p>
+              <p>
+                <strong>Tip:</strong> Generate 30-60 seconds of looping music.
+                Short loops = small file size
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              🔊 Sound Effects
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Where:</strong>
+                <a href="https://freesound.org/" target="_blank"
+                  >Freesound.org</a
+                >
+              </p>
+              <p>
+                <strong>How:</strong> Search for what you need ("coin sound,"
+                "explosion," "click")
+              </p>
+              <p><strong>Format:</strong> WAV or MP3</p>
+              <p>
+                <strong>Tip:</strong> Most sound effects are 0.5-3 seconds.
+                Download the shortest one you find
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              🎨 Graphics & Sprites
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Where:</strong>
+                <a href="https://itch.io/game-assets/free" target="_blank"
+                  >itch.io/game-assets/free</a
+                >
+                has massive free packs
+              </p>
+              <p>
+                <strong>How:</strong> Search for your game style (pixel art,
+                cartoon, minimalist, etc.) and download packs
+              </p>
+              <p><strong>Format:</strong> PNG (best for transparency) or JPG</p>
+              <p>
+                <strong>Tip:</strong> Look for "sprite sheets" if you need
+                animated characters
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              🤖 Generated Graphics
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Where:</strong> ChatGPT, Claude, Bing Image Creator, or
+                similar AI tools
+              </p>
+              <p>
+                <strong>How:</strong> Describe what you want ("a happy mushroom
+                character, pixel art style") and download the image
+              </p>
+              <p><strong>Format:</strong> PNG preferred (keeps transparency)</p>
+              <p>
+                <strong>Tip:</strong> AI-generated graphics are fast but may
+                need tweaking. Use them as a starting point
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              🎮 UI Elements (Buttons, Menus, Borders)
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Where:</strong> itch.io asset packs OR generate them
+                with AI
+              </p>
+              <p>
+                <strong>How:</strong> Search for "UI pack" or ask an AI to
+                generate buttons/menus
+              </p>
+              <p><strong>Format:</strong> PNG</p>
+              <p>
+                <strong>Tip:</strong> Consistent UI makes games feel
+                professional. Pick one style and stick with it
+              </p>
+            </div>
+          </div>
         </div>
-        
-        <!-- Modal: File Size Limits -->
-        <div class="modal" id="modal-file-size">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-file-size')">&times;</button>
-                <h2>File Size Limits</h2>
-                <p>Keep your total folder under 100MB. itch.io has soft limits, and larger games take longer to download and play.</p>
-                <ul style="margin-top: 15px;">
-                    <li><strong>Music:</strong> 3-10MB per track (use MP3 compression)</li>
-                    <li><strong>Sound effects:</strong> 100KB-1MB each</li>
-                    <li><strong>Images:</strong> 500KB-2MB each (use PNG compression)</li>
-                </ul>
-                <p style="margin-top: 15px;">If you're adding video, keep clips under 30 seconds and compress aggressively.</p>
-            </div>
+
+        <div class="highlight-box">
+          <p>
+            <strong>Start with free assets.</strong> Once your game is polished
+            and you know what you need, you can commission custom art. For now,
+            good-enough assets let you focus on gameplay.
+          </p>
         </div>
-        
-        <!-- PAGE 7: Sharing on itch.io -->
-        <div class="content">
-            <h2>Sharing Your Game: itch.io</h2>
-            <p>You've built something cool. Now let the world play it.</p>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">Two Ways to Share:</h3>
-            
-            <div class="accordion">
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Option 1: Single .HTML File
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>If your game is just one file (no sounds, graphics, etc.):</p>
-                        <p style="margin-top: 10px;">• Upload just the .HTML file directly to itch.io</p>
-                        <p>• Players can click "Play in Browser" instantly</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Option 2: Zipped Folder
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p>If your game has a folder structure (sounds, images, etc.):</p>
-                        <p style="margin-top: 10px;">• Right-click the my-game folder → "Compress" or "Send to → Compressed (.zip) folder"</p>
-                        <p>• Name it my-game.zip</p>
-                        <p>• Upload to itch.io</p>
-                        <p>• Players download and extract, then open index.html</p>
-                    </div>
-                </div>
-            </div>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">Before You Upload:</h3>
-            
-            <div class="tab-buttons">
-                <button class="tab-btn active" onclick="switchTab(event, 'tab-test')">Test Locally</button>
-                <button class="tab-btn" onclick="switchTab(event, 'tab-upload')">Upload to itch.io</button>
-            </div>
-            
-            <div id="tab-test" class="tab-content active">
-                <div class="workflow-steps">
-                    <div class="workflow-step">
-                        Open your game in your browser one more time
-                    </div>
-                    <div class="workflow-step">
-                        Test every feature: clicking, sounds, music, difficulty progression
-                    </div>
-                    <div class="workflow-step">
-                        Play through the entire game once
-                    </div>
-                    <div class="workflow-step">
-                        Check file paths (make sure &lt;img src="images/player.png"&gt; actually works)
-                    </div>
-                </div>
-                
-                <div class="note-box">
-                    <p><strong>⚠️ Test Before Sharing:</strong> If something doesn't work on your computer, it won't work for players either. Always test on itch.io in a fresh browser before sharing the link widely.</p>
-                </div>
-            </div>
-            
-            <div id="tab-upload" class="tab-content">
-                <div class="workflow-steps">
-                    <div class="workflow-step">
-                        Create an account at <a href="https://itch.io" target="_blank" style="color: #667eea; font-weight: bold;">itch.io</a>
-                    </div>
-                    <div class="workflow-step">
-                        Click "Upload New Project"
-                    </div>
-                    <div class="workflow-step">
-                        Name your game, write a description
-                    </div>
-                    <div class="workflow-step">
-                        Choose "HTML" as the game type
-                    </div>
-                    <div class="workflow-step">
-                        Upload your file or .zip folder
-                    </div>
-                    <div class="workflow-step">
-                        Set it to "Public"
-                    </div>
-                    <div class="workflow-step">
-                        Share the link
-                    </div>
-                </div>
-                
-                <div class="highlight-box">
-                    <p><strong>🎉 Shipping is Real:</strong> You've gone from idea → code → asset → playable. That's the full pipeline. You shipped a game.</p>
-                </div>
-            </div>
-            
-            <div class="highlight-box">
-                <p><strong>🎉 Shipping is Real:</strong> You've gone from idea → code → asset → playable. That's the full pipeline. You shipped a game.</p>
-            </div>
+      </div>
+
+      <!-- PAGE 6: Organizing Your Game -->
+      <div class="content">
+        <h2>Organizing Your Game: From .HTML to Folders</h2>
+        <p>
+          Your first game lives in one .HTML file. But as you add sounds,
+          graphics, and code, you need organization.
+        </p>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          Here's the structure:
+        </h3>
+
+        <div class="folder-structure">
+          my-game/ ├── index.html ├── sounds/ │ ├── coin.mp3 │ ├── explosion.mp3
+          │ └── click.wav ├── music/ │ └── background-music.mp3 ├── images/ │
+          ├── player.png │ ├── enemy.png │ └── background.png ├── sprites/ │ ├──
+          character-walk.png │ └── explosion-animation.png └── ui/ ├──
+          button.png └── border.png
         </div>
-        
-        <!-- PAGE 8: Wrap-Up -->
-        <div class="content">
-            <h2>What You've Learned</h2>
-            
-            <div class="highlight-box">
-                <p>✓ <strong>Start with a single .HTML file.</strong> Open it. Play it. That's the whole loop.</p>
-                <p style="margin-top: 12px;">✓ <strong>Iteration is the secret.</strong> Ask → test → refine → repeat. Most games are built this way.</p>
-                <p style="margin-top: 12px;">✓ <strong>Be specific with prompts.</strong> Vague questions = wasted time. Surgical fixes = fast progress.</p>
-                <p style="margin-top: 12px;">✓ <strong>Free assets are everywhere.</strong> Sounds, music, graphics—you don't need to spend money.</p>
-                <p style="margin-top: 12px;">✓ <strong>Organize early.</strong> Folders save time as your game grows.</p>
-                <p style="margin-top: 12px;">✓ <strong>Share it.</strong> Put your game on itch.io. It's real now.</p>
+
+        <div class="info-button-group">
+          <p><strong>Why This Structure?</strong></p>
+          <button
+            class="info-btn"
+            onclick="openModal('modal-why-structure')"
+            style="margin-left: 0"
+          >
+            Learn More →
+          </button>
+        </div>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          How to Set It Up:
+        </h3>
+        <div class="workflow-steps">
+          <div class="workflow-step">
+            Create a new folder called <strong>my-game</strong>
+          </div>
+          <div class="workflow-step">
+            Inside, create subfolders: <strong>sounds</strong>,
+            <strong>music</strong>, <strong>images</strong>,
+            <strong>sprites</strong>, <strong>ui</strong>
+          </div>
+          <div class="workflow-step">
+            Put your <strong>index.html</strong> file in the root (the main
+            my-game folder)
+          </div>
+          <div class="workflow-step">
+            Drag asset files into their matching folders
+          </div>
+          <div class="workflow-step">
+            In your HTML, reference files like:
+            <code>&lt;img src="images/player.png"&gt;</code>
+          </div>
+        </div>
+
+        <div class="info-button-group">
+          <p><strong>📌 File Size Limits</strong></p>
+          <button
+            class="info-btn"
+            onclick="openModal('modal-file-size')"
+            style="margin-left: 0"
+          >
+            Details →
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Why This Structure -->
+      <div class="modal" id="modal-why-structure">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-why-structure')">
+            &times;
+          </button>
+          <h2>Why This Structure?</h2>
+          <ul>
+            <li>
+              <strong>Easy to find things</strong> — Need to change a sound?
+              It's in sounds/
+            </li>
+            <li>
+              <strong>Easy to share</strong> — Zip the entire folder and upload
+              to itch.io
+            </li>
+            <li>
+              <strong>Scalable</strong> — As your game grows, you add folders,
+              not chaos
+            </li>
+            <li>
+              <strong>Professional</strong> — This is how real developers
+              organize games
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Modal: File Size Limits -->
+      <div class="modal" id="modal-file-size">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-file-size')">
+            &times;
+          </button>
+          <h2>File Size Limits</h2>
+          <p>
+            Keep your total folder under 100MB. itch.io has soft limits, and
+            larger games take longer to download and play.
+          </p>
+          <ul style="margin-top: 15px">
+            <li>
+              <strong>Music:</strong> 3-10MB per track (use MP3 compression)
+            </li>
+            <li><strong>Sound effects:</strong> 100KB-1MB each</li>
+            <li>
+              <strong>Images:</strong> 500KB-2MB each (use PNG compression)
+            </li>
+          </ul>
+          <p style="margin-top: 15px">
+            If you're adding video, keep clips under 30 seconds and compress
+            aggressively.
+          </p>
+        </div>
+      </div>
+
+      <!-- PAGE 7: Sharing on itch.io -->
+      <div class="content">
+        <h2>Sharing Your Game: itch.io</h2>
+        <p>You've built something cool. Now let the world play it.</p>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          Two Ways to Share:
+        </h3>
+
+        <div class="accordion">
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Option 1: Single .HTML File
+              <span class="accordion-icon">▼</span>
             </div>
-            
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">What's Next?</h3>
-            <p style="margin-top: 20px;"><strong>Module 1</strong> taught you <em>why</em> games work.</p>
-            <p style="margin-top: 15px;"><strong>Module 2</strong> taught you <em>how to build</em> them with AI.</p>
-            <p style="margin-top: 15px;"><strong>Module 3</strong> teaches you <em>how to prompt like a pro</em>—advanced techniques to get exactly what you want from the AI, every time.</p>
-            
-            <p style="margin-top: 30px; font-size: 1.1em; color: #667eea; font-weight: bold;">You're ready.</p>
+            <div class="accordion-content">
+              <p>If your game is just one file (no sounds, graphics, etc.):</p>
+              <p style="margin-top: 10px">
+                • Upload just the .HTML file directly to itch.io
+              </p>
+              <p>• Players can click "Play in Browser" instantly</p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Option 2: Zipped Folder
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>If your game has a folder structure (sounds, images, etc.):</p>
+              <p style="margin-top: 10px">
+                • Right-click the my-game folder → "Compress" or "Send to →
+                Compressed (.zip) folder"
+              </p>
+              <p>• Name it my-game.zip</p>
+              <p>• Upload to itch.io</p>
+              <p>• Players download and extract, then open index.html</p>
+            </div>
+          </div>
         </div>
-        
-        <div class="nav-buttons">
-            <button onclick="prevPage()" id="prev-btn">← Previous</button>
-            <button onclick="nextPage()" id="next-btn">Next →</button>
-            <a href="index.html" id="complete-btn" class="button" style="display: none;" onclick="completeModule(2)">Complete Module</a>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          Before You Upload:
+        </h3>
+
+        <div class="tab-buttons">
+          <button class="tab-btn active" onclick="switchTab(event, 'tab-test')">
+            Test Locally
+          </button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-upload')">
+            Upload to itch.io
+          </button>
         </div>
+
+        <div id="tab-test" class="tab-content active">
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              Open your game in your browser one more time
+            </div>
+            <div class="workflow-step">
+              Test every feature: clicking, sounds, music, difficulty
+              progression
+            </div>
+            <div class="workflow-step">Play through the entire game once</div>
+            <div class="workflow-step">
+              Check file paths (make sure &lt;img src="images/player.png"&gt;
+              actually works)
+            </div>
+          </div>
+
+          <div class="note-box">
+            <p>
+              <strong>⚠️ Test Before Sharing:</strong> If something doesn't work
+              on your computer, it won't work for players either. Always test on
+              itch.io in a fresh browser before sharing the link widely.
+            </p>
+          </div>
+        </div>
+
+        <div id="tab-upload" class="tab-content">
+          <div class="workflow-steps">
+            <div class="workflow-step">
+              Create an account at
+              <a
+                href="https://itch.io"
+                target="_blank"
+                style="color: #667eea; font-weight: bold"
+                >itch.io</a
+              >
+            </div>
+            <div class="workflow-step">Click "Upload New Project"</div>
+            <div class="workflow-step">Name your game, write a description</div>
+            <div class="workflow-step">Choose "HTML" as the game type</div>
+            <div class="workflow-step">Upload your file or .zip folder</div>
+            <div class="workflow-step">Set it to "Public"</div>
+            <div class="workflow-step">Share the link</div>
+          </div>
+
+          <div class="highlight-box">
+            <p>
+              <strong>🎉 Shipping is Real:</strong> You've gone from idea → code
+              → asset → playable. That's the full pipeline. You shipped a game.
+            </p>
+          </div>
+        </div>
+
+        <div class="highlight-box">
+          <p>
+            <strong>🎉 Shipping is Real:</strong> You've gone from idea → code →
+            asset → playable. That's the full pipeline. You shipped a game.
+          </p>
+        </div>
+      </div>
+
+      <!-- PAGE 8: Wrap-Up -->
+      <div class="content">
+        <h2>What You've Learned</h2>
+
+        <div class="highlight-box">
+          <p>
+            ✓ <strong>Start with a single .HTML file.</strong> Open it. Play it.
+            That's the whole loop.
+          </p>
+          <p style="margin-top: 12px">
+            ✓ <strong>Iteration is the secret.</strong> Ask → test → refine →
+            repeat. Most games are built this way.
+          </p>
+          <p style="margin-top: 12px">
+            ✓ <strong>Be specific with prompts.</strong> Vague questions =
+            wasted time. Surgical fixes = fast progress.
+          </p>
+          <p style="margin-top: 12px">
+            ✓ <strong>Free assets are everywhere.</strong> Sounds, music,
+            graphics—you don't need to spend money.
+          </p>
+          <p style="margin-top: 12px">
+            ✓ <strong>Organize early.</strong> Folders save time as your game
+            grows.
+          </p>
+          <p style="margin-top: 12px">
+            ✓ <strong>Share it.</strong> Put your game on itch.io. It's real
+            now.
+          </p>
+        </div>
+
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          What's Next?
+        </h3>
+        <p style="margin-top: 20px">
+          <strong>Module 1</strong> taught you <em>why</em> games work.
+        </p>
+        <p style="margin-top: 15px">
+          <strong>Module 2</strong> taught you <em>how to build</em> them with
+          AI.
+        </p>
+        <p style="margin-top: 15px">
+          <strong>Module 3</strong> teaches you
+          <em>how to prompt like a pro</em>—advanced techniques to get exactly
+          what you want from the AI, every time.
+        </p>
+
+        <p
+          style="
+            margin-top: 30px;
+            font-size: 1.1em;
+            color: #667eea;
+            font-weight: bold;
+          "
+        >
+          You're ready.
+        </p>
+      </div>
+
+      <div class="nav-buttons">
+        <button onclick="prevPage()" id="prev-btn">← Previous</button>
+        <button onclick="nextPage()" id="next-btn">Next →</button>
+        <a
+          href="index.html"
+          id="complete-btn"
+          class="button"
+          style="display: none"
+          onclick="completeModule(2)"
+          >Complete Module</a
+        >
+      </div>
     </div>
-    
+
     <script>
-        let currentPage = 0;
-        const totalPages = 8;
-        
-        function updatePage() {
-            const pages = document.querySelectorAll('.content');
-            const header = document.querySelector('.header');
+      let currentPage = 0;
+      const totalPages = 8;
 
-            pages.forEach((p, i) => {
-                p.classList.remove('active');
-                if (i === currentPage) {
-                    p.classList.add('active');
-                }
-            });
+      function updatePage() {
+        const pages = document.querySelectorAll(".content");
+        const header = document.querySelector(".header");
 
-            if (currentPage !== 0) {
-                header.style.display = 'none';
-            } else {
-                header.style.display = 'block';
-            }
-            
-            document.getElementById('prev-btn').disabled = currentPage === 0;
-            
-            if (currentPage === totalPages - 1) {
-                document.getElementById('next-btn').style.display = 'none';
-                document.getElementById('complete-btn').style.display = 'inline-block';
-            } else {
-                document.getElementById('next-btn').style.display = 'inline-block';
-                document.getElementById('complete-btn').style.display = 'none';
-            }
-            
-            const progressPercent = ((currentPage + 1) / totalPages) * 100;
-            document.querySelector('.progress-fill').style.width = progressPercent + '%';
-            window.scrollTo(0, 0);
+        pages.forEach((p, i) => {
+          p.classList.remove("active");
+          if (i === currentPage) {
+            p.classList.add("active");
+          }
+        });
+
+        if (currentPage !== 0) {
+          header.style.display = "none";
+        } else {
+          header.style.display = "block";
         }
-        
-        function nextPage() {
-            if (currentPage < totalPages - 1) {
-                currentPage++;
-                updatePage();
-            }
+
+        document.getElementById("prev-btn").disabled = currentPage === 0;
+
+        if (currentPage === totalPages - 1) {
+          document.getElementById("next-btn").style.display = "none";
+          document.getElementById("complete-btn").style.display =
+            "inline-block";
+        } else {
+          document.getElementById("next-btn").style.display = "inline-block";
+          document.getElementById("complete-btn").style.display = "none";
         }
-        
-        function prevPage() {
-            if (currentPage > 0) {
-                currentPage--;
-                updatePage();
-            }
+
+        const progressPercent = ((currentPage + 1) / totalPages) * 100;
+        document.querySelector(".progress-fill").style.width =
+          progressPercent + "%";
+        window.scrollTo(0, 0);
+      }
+
+      function nextPage() {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          updatePage();
         }
-        
-        function completeModule(moduleNumber) {
-            localStorage.setItem('module' + moduleNumber + '_completed', 'true');
+      }
+
+      function prevPage() {
+        if (currentPage > 0) {
+          currentPage--;
+          updatePage();
         }
-        
-        
-        let carouselIndex = 0;
-        
-        function updateCarousel() {
-            const cards = document.querySelectorAll('.carousel-card');
-            cards.forEach((c, i) => {
-                c.classList.remove('active');
-                if (i === carouselIndex) {
-                    c.classList.add('active');
-                }
-            });
-            document.getElementById('carousel-counter').textContent = `${carouselIndex + 1} / 4`;
+      }
+
+      function completeModule(moduleNumber) {
+        localStorage.setItem("module" + moduleNumber + "_completed", "true");
+      }
+
+      let carouselIndex = 0;
+
+      function updateCarousel() {
+        const cards = document.querySelectorAll(".carousel-card");
+        cards.forEach((c, i) => {
+          c.classList.remove("active");
+          if (i === carouselIndex) {
+            c.classList.add("active");
+          }
+        });
+        document.getElementById("carousel-counter").textContent = `${
+          carouselIndex + 1
+        } / 4`;
+      }
+
+      function carouselNext() {
+        if (carouselIndex < 3) {
+          carouselIndex++;
+          updateCarousel();
         }
-        
-        function carouselNext() {
-            if (carouselIndex < 3) {
-                carouselIndex++;
-                updateCarousel();
-            }
+      }
+
+      function carouselPrev() {
+        if (carouselIndex > 0) {
+          carouselIndex--;
+          updateCarousel();
         }
-        
-        function carouselPrev() {
-            if (carouselIndex > 0) {
-                carouselIndex--;
-                updateCarousel();
-            }
+      }
+
+      function switchTab(event, tabId) {
+        // Hide all tabs
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => tab.classList.remove("active"));
+
+        // Remove active from all buttons
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Show selected tab and mark button as active
+        document.getElementById(tabId).classList.add("active");
+        event.target.classList.add("active");
+      }
+
+      function toggleAccordion(el) {
+        const accordion = el.closest(".accordion");
+        const allItems = accordion.querySelectorAll(".accordion-item");
+
+        allItems.forEach((item) => {
+          if (item !== el) {
+            item.classList.remove("active");
+          }
+        });
+
+        el.classList.toggle("active");
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("active");
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+      }
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.classList.remove("active");
         }
-        
-        function switchTab(event, tabId) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active from all buttons
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected tab and mark button as active
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-        }
-        
-        function toggleAccordion(el) {
-            const accordion = el.closest('.accordion');
-            const allItems = accordion.querySelectorAll('.accordion-item');
-            
-            allItems.forEach(item => {
-                if (item !== el) {
-                    item.classList.remove('active');
-                }
-            });
-            
-            el.classList.toggle('active');
-        }
-        
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-        
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-        
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        }
-        
-        updatePage();
+      };
+
+      updatePage();
     </script>
-</body>
+  </body>
 </html>
