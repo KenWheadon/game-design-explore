@@ -1200,12 +1200,20 @@
         
         function updatePage() {
             const pages = document.querySelectorAll('.content');
+            const header = document.querySelector('.header');
+
             pages.forEach((p, i) => {
                 p.classList.remove('active');
                 if (i === currentPage) {
                     p.classList.add('active');
                 }
             });
+
+            if (currentPage !== 0) {
+                header.style.display = 'none';
+            } else {
+                header.style.display = 'block';
+            }
             
             document.getElementById('prev-btn').disabled = currentPage === 0;
             
