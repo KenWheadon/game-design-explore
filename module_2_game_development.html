@@ -487,6 +487,78 @@
         margin: 20px 0;
       }
 
+      /* TABS */
+      .mushroom-tabs .tab-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      .mushroom-tabs .tab-btn {
+        background: none;
+        border: none;
+        padding: 12px 20px;
+        color: #667eea;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1em;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .mushroom-tabs .tab-btn.active {
+        border-bottom-color: #667eea;
+        color: #667eea;
+      }
+
+      .mushroom-tabs .tab-btn:hover {
+        color: #764ba2;
+      }
+
+      .mushroom-tabs .tab-content {
+        display: none;
+        padding: 25px;
+        background: white;
+        border-radius: 8px;
+        border: 2px solid #667eea;
+      }
+
+      .mushroom-tabs .tab-content.active {
+        display: block;
+      }
+
+      .mushroom-tabs .prompt-item {
+        margin: 15px 0;
+        padding: 15px;
+        background: #f0f4ff;
+        border-radius: 4px;
+      }
+
+      .mushroom-tabs .prompt-item strong {
+        color: #667eea;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .mushroom-tabs .result-text {
+        margin: 15px 0;
+        padding: 15px;
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        border-radius: 4px;
+        color: #333;
+        font-size: 0.95em;
+        line-height: 1.6;
+      }
+
+      .mushroom-tabs .result-label {
+        color: #2196f3;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+      }
+
       /* CAROUSEL */
       .carousel-container {
         margin: 30px 0;
@@ -726,35 +798,11 @@
           </button>
         </div>
 
-        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
-          How to Run It:
-        </h3>
-        <div class="workflow-steps">
-          <div class="workflow-step">
-            <strong>1. Ask the AI</strong><br />
-            Create a complete HTML5 game with your idea
-          </div>
-          <div class="workflow-step">
-            <strong>2. Copy the response</strong><br />
-            Select all the code the AI gives you
-          </div>
-          <div class="workflow-step">
-            <strong>3. Paste into a text editor</strong><br />
-            Notepad, VS Code, or any text editor works
-          </div>
-          <div class="workflow-step">
-            <strong>4. Save as game.html</strong><br />
-            Make sure the file ends with .html
-          </div>
-          <div class="workflow-step">
-            <strong>5. Double-click the file</strong><br />
-            It opens in your browser automatically
-          </div>
-          <div class="workflow-step">
-            <strong>6. Play it immediately</strong><br />
-            No server. No waiting. No complexity.
-          </div>
-        </div>
+        <img
+          src="images/how-to-run.jpg"
+          alt="How to run a game"
+          style="width: 100%; border-radius: 8px; margin-top: 15px"
+        />
 
         <div class="highlight-box">
           <p>
@@ -763,15 +811,6 @@
             complete HTML file with all CSS and JavaScript built-in. You copy,
             save, open. Done.
           </p>
-          <div style="margin-top: 15px">
-            <button
-              class="info-btn"
-              onclick="openModal('modal-start-simple')"
-              style="margin-left: 0"
-            >
-              More Details →
-            </button>
-          </div>
         </div>
       </div>
 
@@ -821,8 +860,14 @@
           something playable, then refining it in seconds.
         </p>
 
-            <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em;">The Loop:</h3>
-            <img src="images/the-loop.jpg" alt="The Loop" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
+          The Loop:
+        </h3>
+        <img
+          src="images/the-loop.jpg"
+          alt="The Loop"
+          style="width: 100%; border-radius: 8px; margin-top: 15px"
+        />
 
         <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
           🎮 Real Example: The Mushroom Clicker
@@ -831,9 +876,35 @@
           Click through the four prompts to see how a game evolves in 5 minutes:
         </p>
 
-        <div class="carousel-container">
-          <div class="carousel-card active">
-            <h3>Prompt 1</h3>
+        <div class="mushroom-tabs">
+          <div class="tab-buttons">
+            <button
+              class="tab-btn active"
+              onclick="switchMushroomTab(event, 'mushroom-prompt-1')"
+            >
+              Prompt 1
+            </button>
+            <button
+              class="tab-btn"
+              onclick="switchMushroomTab(event, 'mushroom-prompt-2')"
+            >
+              Prompt 2
+            </button>
+            <button
+              class="tab-btn"
+              onclick="switchMushroomTab(event, 'mushroom-prompt-3')"
+            >
+              Prompt 3
+            </button>
+            <button
+              class="tab-btn"
+              onclick="switchMushroomTab(event, 'mushroom-prompt-4')"
+            >
+              Prompt 4
+            </button>
+          </div>
+
+          <div id="mushroom-prompt-1" class="tab-content active">
             <div class="prompt-item">
               <strong>First Prompt:</strong>
               "Make a clicker game where you click mushrooms to earn points.
@@ -841,14 +912,13 @@
               50 times."
             </div>
             <div class="result-text">
-              <span class="carousel-result-label">Result:</span>
+              <span class="result-label">Result:</span>
               You get a working game. It works, but the mushrooms don't move
               around—they're in the same spot every time. Boring.
             </div>
           </div>
 
-          <div class="carousel-card">
-            <h3>Prompt 2</h3>
+          <div id="mushroom-prompt-2" class="tab-content">
             <div class="prompt-item">
               <strong>Follow-Up Prompt:</strong>
               "Make the mushrooms appear in random positions each time the
@@ -856,14 +926,13 @@
               when you click."
             </div>
             <div class="result-text">
-              <span class="carousel-result-label">Result:</span>
+              <span class="result-label">Result:</span>
               Now it's more fun. But it's too easy. You're clicking mushrooms
               faster than they appear.
             </div>
           </div>
 
-          <div class="carousel-card">
-            <h3>Prompt 3</h3>
+          <div id="mushroom-prompt-3" class="tab-content">
             <div class="prompt-item">
               <strong>Next Prompt:</strong>
               "Increase the spawn rate so new mushrooms appear faster. Make the
@@ -871,29 +940,22 @@
               seconds."
             </div>
             <div class="result-text">
-              <span class="carousel-result-label">Result:</span>
+              <span class="result-label">Result:</span>
               Better. But now you realize there's no feedback when time runs
               out. One more fix needed.
             </div>
           </div>
 
-          <div class="carousel-card">
-            <h3>Prompt 4 - Done!</h3>
+          <div id="mushroom-prompt-4" class="tab-content">
             <div class="prompt-item">
               <strong>Final Prompt:</strong>
               "When the time runs out, show a big 'GAME OVER' message with the
               final score. Add a restart button."
             </div>
             <div class="result-text">
-              <span class="carousel-result-label">Result:</span>
+              <span class="result-label">Result:</span>
               Done. Four prompts. Five minutes. A playable clicker game.
             </div>
-          </div>
-
-          <div class="carousel-controls">
-            <button onclick="carouselPrev()">← Previous</button>
-            <span id="carousel-counter">1 / 4</span>
-            <button onclick="carouselNext()">Next →</button>
           </div>
         </div>
 
@@ -1503,33 +1565,20 @@
         localStorage.setItem("module" + moduleNumber + "_completed", "true");
       }
 
-      let carouselIndex = 0;
+      function switchMushroomTab(event, tabId) {
+        const tabContainer = event.target.closest(".mushroom-tabs");
 
-      function updateCarousel() {
-        const cards = document.querySelectorAll(".carousel-card");
-        cards.forEach((c, i) => {
-          c.classList.remove("active");
-          if (i === carouselIndex) {
-            c.classList.add("active");
-          }
-        });
-        document.getElementById("carousel-counter").textContent = `${
-          carouselIndex + 1
-        } / 4`;
-      }
+        // Hide all tabs in this container
+        const tabs = tabContainer.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => tab.classList.remove("active"));
 
-      function carouselNext() {
-        if (carouselIndex < 3) {
-          carouselIndex++;
-          updateCarousel();
-        }
-      }
+        // Remove active from all buttons in this container
+        const buttons = tabContainer.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
 
-      function carouselPrev() {
-        if (carouselIndex > 0) {
-          carouselIndex--;
-          updateCarousel();
-        }
+        // Show selected tab and mark button as active
+        tabContainer.querySelector("#" + tabId).classList.add("active");
+        event.target.classList.add("active");
       }
 
       function switchTab(event, tabId) {
