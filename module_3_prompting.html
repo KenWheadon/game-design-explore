@@ -441,6 +441,24 @@
             background: #ccc;
             cursor: not-allowed;
         }
+
+        .nav-buttons a.button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .nav-buttons a.button:hover {
+            background: #764ba2;
+        }
         
         .progress-bar {
             width: 100%;
@@ -1018,6 +1036,7 @@ Polish: Add a title screen that says "LOST ON KEPLER-442b" before the first scen
         <div class="nav-buttons">
             <button onclick="prevPage()" id="prev-btn">← Previous</button>
             <button onclick="nextPage()" id="next-btn">Next →</button>
+            <a href="index.html" id="complete-btn" class="button" style="display: none;">Complete Module</a>
         </div>
     </div>
     
@@ -1035,7 +1054,14 @@ Polish: Add a title screen that says "LOST ON KEPLER-442b" before the first scen
             });
             
             document.getElementById('prev-btn').disabled = currentPage === 0;
-            document.getElementById('next-btn').disabled = currentPage === totalPages - 1;
+            
+            if (currentPage === totalPages - 1) {
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('complete-btn').style.display = 'inline-block';
+            } else {
+                document.getElementById('next-btn').style.display = 'inline-block';
+                document.getElementById('complete-btn').style.display = 'none';
+            }
             
             const progressPercent = ((currentPage + 1) / totalPages) * 100;
             document.querySelector('.progress-fill').style.width = progressPercent + '%';

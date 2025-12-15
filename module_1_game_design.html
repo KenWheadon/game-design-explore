@@ -158,70 +158,63 @@
             font-weight: normal;
         }
         
-        /* CAROUSEL */
-        .carousel-container {
-            margin: 30px 0;
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 8px;
-        }
         
-        .carousel-card {
+        /* TABS */
+        .tab-container {
+            margin: 30px 0;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .tab-content {
             display: none;
             padding: 25px;
-            background: white;
-            border-radius: 8px;
-            border: 2px solid #667eea;
+            background: #f9f9f9;
+            border-radius: 0 0 8px 8px;
+            border: 1px solid #ddd;
+            border-top: none;
         }
-        
-        .carousel-card.active {
+
+        .tab-content.active {
             display: block;
         }
-        
-        .carousel-card h3 {
+        .tab-content h3 {
             color: #667eea;
             font-size: 1.4em;
             margin-bottom: 15px;
         }
-        
-        .carousel-card .ingredient {
+
+        .tab-content .ingredient {
             margin: 12px 0;
             padding: 10px;
             background: #f0f4ff;
             border-radius: 4px;
         }
-        
-        .carousel-card .ingredient strong {
+
+        .tab-content .ingredient strong {
             color: #667eea;
             display: block;
             margin-bottom: 5px;
-        }
-        
-        .carousel-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-        
-        .carousel-controls button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.95em;
-            transition: background 0.2s;
-        }
-        
-        .carousel-controls button:hover {
-            background: #764ba2;
-        }
-        
-        .carousel-controls span {
-            color: #667eea;
-            font-weight: bold;
         }
         
         /* MODAL */
@@ -446,6 +439,24 @@
             background: #ccc;
             cursor: not-allowed;
         }
+
+        .nav-buttons a.button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.2s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .nav-buttons a.button:hover {
+            background: #764ba2;
+        }
         
         .progress-bar {
             width: 100%;
@@ -560,8 +571,14 @@
             <h2>See It in Action</h2>
             <p>Here are three games that nail all 5 ingredients. Click through to see how:</p>
             
-            <div class="carousel-container">
-                <div class="carousel-card active">
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="breakout">Breakout / Brick Breaker</button>
+                    <button class="tab-btn" data-tab="snake">Snake</button>
+                    <button class="tab-btn" data-tab="flappy">Flappy Bird</button>
+                </div>
+                
+                <div class="tab-content active" id="breakout">
                     <h3>Breakout / Brick Breaker</h3>
                     <div class="ingredient">
                         <strong>Goal:</strong> Destroy all the bricks before the ball falls past you
@@ -580,7 +597,7 @@
                     </div>
                 </div>
                 
-                <div class="carousel-card">
+                <div class="tab-content" id="snake">
                     <h3>Snake</h3>
                     <div class="ingredient">
                         <strong>Goal:</strong> Eat as much food as possible and get the highest score
@@ -599,7 +616,7 @@
                     </div>
                 </div>
                 
-                <div class="carousel-card">
+                <div class="tab-content" id="flappy">
                     <h3>Flappy Bird</h3>
                     <div class="ingredient">
                         <strong>Goal:</strong> Fly as far as possible without hitting pipes or the ground
@@ -616,12 +633,6 @@
                     <div class="ingredient">
                         <strong>Feedback:</strong> Score jumps up with a sound each time you pass a pipe, screen shakes, you hear a "thud" when you crash
                     </div>
-                </div>
-                
-                <div class="carousel-controls">
-                    <button onclick="carouselPrev()">← Previous</button>
-                    <span id="carousel-counter">1 / 3</span>
-                    <button onclick="carouselNext()">Next →</button>
                 </div>
             </div>
             
@@ -886,6 +897,7 @@
         <div class="nav-buttons">
             <button onclick="prevPage()" id="prev-btn">← Previous</button>
             <button onclick="nextPage()" id="next-btn">Next →</button>
+            <a href="index.html" id="complete-btn" class="button" style="display: none;">Complete Module</a>
         </div>
     </div>
     
@@ -903,7 +915,14 @@
             });
             
             document.getElementById('prev-btn').disabled = currentPage === 0;
-            document.getElementById('next-btn').disabled = currentPage === totalPages - 1;
+            
+            if (currentPage === totalPages - 1) {
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('complete-btn').style.display = 'inline-block';
+            } else {
+                document.getElementById('next-btn').style.display = 'inline-block';
+                document.getElementById('complete-btn').style.display = 'none';
+            }
             
             const progressPercent = ((currentPage + 1) / totalPages) * 100;
             document.querySelector('.progress-fill').style.width = progressPercent + '%';
@@ -924,32 +943,29 @@
             }
         }
         
-        
-        let carouselIndex = 0;
-        
-        function updateCarousel() {
-            const cards = document.querySelectorAll('.carousel-card');
-            cards.forEach((c, i) => {
-                c.classList.remove('active');
-                if (i === carouselIndex) {
-                    c.classList.add('active');
-                }
+        function setupTabs() {
+            const tabContainer = document.querySelector('.tab-container');
+            if (!tabContainer) return;
+
+            const tabButtons = tabContainer.querySelectorAll('.tab-btn');
+            const tabContents = tabContainer.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
             });
-            document.getElementById('carousel-counter').textContent = `${carouselIndex + 1} / 3`;
-        }
-        
-        function carouselNext() {
-            if (carouselIndex < 2) {
-                carouselIndex++;
-                updateCarousel();
-            }
-        }
-        
-        function carouselPrev() {
-            if (carouselIndex > 0) {
-                carouselIndex--;
-                updateCarousel();
-            }
         }
         
         function toggleAccordion(el) {
@@ -980,6 +996,7 @@
         }
         
         updatePage();
+        setupTabs();
     </script>
 </body>
 </html>
