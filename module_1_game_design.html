@@ -897,7 +897,7 @@
         <div class="nav-buttons">
             <button onclick="prevPage()" id="prev-btn">← Previous</button>
             <button onclick="nextPage()" id="next-btn">Next →</button>
-            <a href="index.html" id="complete-btn" class="button" style="display: none;">Complete Module</a>
+            <a href="index.html" id="complete-btn" class="button" style="display: none;" onclick="completeModule(1)">Complete Module</a>
         </div>
     </div>
     
@@ -941,6 +941,10 @@
                 currentPage--;
                 updatePage();
             }
+        }
+        
+        function completeModule(moduleNumber) {
+            localStorage.setItem('module' + moduleNumber + '_completed', 'true');
         }
         
         function setupTabs() {

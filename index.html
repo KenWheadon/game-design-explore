@@ -99,6 +99,13 @@
             background: #764ba2;
         }
 
+        .checkmark {
+            color: #4CAF50;
+            font-size: 1.5em;
+            margin-left: 10px;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -109,30 +116,46 @@
         </div>
         
         <div class="modules-list">
-            <div class="module-card">
+            <div class="module-card" data-module="1">
                 <div>
-                    <h2>Module 1: Game Design Basics</h2>
+                    <h2>Module 1: Game Design Basics <span class="checkmark">✓</span></h2>
                     <p>Learn the fundamental ingredients of what makes a game fun.</p>
                 </div>
                 <a href="module_1_game_design.html" class="button">Start Module 1</a>
             </div>
             
-            <div class="module-card">
+            <div class="module-card" data-module="2">
                 <div>
-                    <h2>Module 2: Game Development</h2>
+                    <h2>Module 2: Game Development <span class="checkmark">✓</span></h2>
                     <p>Bring your game to life with code and interactive elements.</p>
                 </div>
                 <a href="module_2_game_development.html" class="button">Start Module 2</a>
             </div>
             
-            <div class="module-card">
+            <div class="module-card" data-module="3">
                 <div>
-                    <h2>Module 3: Prompting</h2>
+                    <h2>Module 3: Prompting <span class="checkmark">✓</span></h2>
                     <p>Master the art of prompting to generate game assets and ideas.</p>
                 </div>
                 <a href="module_3_prompting.html" class="button">Start Module 3</a>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            for (let i = 1; i <= 3; i++) {
+                if (localStorage.getItem('module' + i + '_completed') === 'true') {
+                    const moduleCard = document.querySelector('.module-card[data-module="' + i + '"]');
+                    if (moduleCard) {
+                        const checkmark = moduleCard.querySelector('.checkmark');
+                        if (checkmark) {
+                            checkmark.style.display = 'inline';
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
