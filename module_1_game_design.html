@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1 – Game Design Basics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+            min-height: 500px;
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .content h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+        }
+        
+        .content p, .content li {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .content ul {
+            margin-left: 25px;
+        }
+        
+        .content li {
+            margin-bottom: 12px;
+        }
+        
+        .highlight-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .highlight-box strong {
+            color: #667eea;
+        }
+        
+        /* FLIP CARDS */
+        .flip-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .flip-card {
+            perspective: 1000px;
+            height: 240px;
+            cursor: pointer;
+        }
+        
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .flip-card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 1.3em;
+        }
+        
+        .flip-card-back {
+            background: #f0f4ff;
+            color: #333;
+            font-size: 0.95em;
+            transform: rotateY(180deg);
+            line-height: 1.5;
+        }
+        
+        .flip-hint {
+            font-size: 0.75em;
+            opacity: 0.8;
+            margin-top: 15px;
+            font-weight: normal;
+        }
+        
+        /* CAROUSEL */
+        .carousel-container {
+            margin: 30px 0;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .carousel-card {
+            display: none;
+            padding: 25px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+        
+        .carousel-card.active {
+            display: block;
+        }
+        
+        .carousel-card h3 {
+            color: #667eea;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+        
+        .carousel-card .ingredient {
+            margin: 12px 0;
+            padding: 10px;
+            background: #f0f4ff;
+            border-radius: 4px;
+        }
+        
+        .carousel-card .ingredient strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .carousel-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .carousel-controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.2s;
+        }
+        
+        .carousel-controls button:hover {
+            background: #764ba2;
+        }
+        
+        .carousel-controls span {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .modal-content p, .modal-content ul {
+            margin-bottom: 15px;
+            line-height: 1.8;
+            font-size: 1em;
+        }
+        
+        .modal-content ul {
+            margin-left: 20px;
+        }
+        
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            margin: -10px 0 0 0;
+        }
+        
+        .close-btn:hover {
+            color: #764ba2;
+        }
+        
+        /* ACCORDION */
+        .accordion {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+        
+        .accordion-header {
+            background: #f9f9f9;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        
+        .accordion-header:hover {
+            background: #f0f4ff;
+        }
+        
+        .accordion-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+        
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+        }
+        
+        .accordion-content p {
+            padding: 15px 15px;
+            margin-bottom: 0;
+            font-size: 0.95em;
+        }
+        
+        .accordion-content p:first-child {
+            padding-top: 15px;
+        }
+        
+        .accordion-content p:last-child {
+            padding-bottom: 15px;
+        }
+        
+        /* INFO BUTTON */
+        .info-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 10px;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .info-btn:hover {
+            background: #764ba2;
+        }
+        
+        .input-section {
+            background: #f0f4ff;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .input-section label {
+            display: block;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .input-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .input-section textarea:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .bonus-section {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
+        }
+        
+        .bonus-section h3 {
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 40px;
+            background: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .nav-buttons button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        
+        .nav-buttons button:hover {
+            background: #764ba2;
+        }
+        
+        .nav-buttons button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 12.5%"></div>
+        </div>
+        
+        <div class="header">
+            <h1>Game Design Basics</h1>
+            <p>Learn the fundamentals. Build your first game in 10 minutes.</p>
+        </div>
+        
+        <!-- Page 1: Welcome -->
+        <div class="content active">
+            <h2>Welcome!</h2>
+            <p>You're about to learn what makes games actually fun—and how to build one yourself.</p>
+            <p>This module takes about <strong>10 minutes</strong>. You can pause and come back anytime.</p>
+            
+            <div class="highlight-box">
+                <p><strong>What you'll learn:</strong> The core ingredients that make every good game work, why they matter, and how to start building your own.</p>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 1.1em;">Ready? Let's go.</p>
+        </div>
+        
+        <!-- Page 2: The 5 Ingredients with Flip Cards -->
+        <div class="content">
+            <h2>Every Game Has 5 Ingredients</h2>
+            <p>Every fun game—whether it's a billion-dollar AAA or something you build today—has these exact elements. Click each card to learn:</p>
+            
+            <div class="flip-cards-container">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            🎯 Goal
+                            <div class="flip-hint">Click to flip</div>
+                        </div>
+                        <div class="flip-card-back">
+                            What are you trying to win or achieve?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            📋 Rules
+                            <div class="flip-hint">Click to flip</div>
+                        </div>
+                        <div class="flip-card-back">
+                            What are you allowed to do? What can't you do?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            ⚡ Challenge
+                            <div class="flip-hint">Click to flip</div>
+                        </div>
+                        <div class="flip-card-back">
+                            What makes it hard? What are the obstacles?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            🎮 Choices
+                            <div class="flip-hint">Click to flip</div>
+                        </div>
+                        <div class="flip-card-back">
+                            Can the player decide what to do, or are they on rails?
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            📊 Feedback
+                            <div class="flip-hint">Click to flip</div>
+                        </div>
+                        <div class="flip-card-back">
+                            Does the game tell you how you're doing? (Points, sounds, visuals)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 25px;">Without even <strong>one</strong> of these, the game falls apart. Let's see how this works with real examples:</p>
+        </div>
+        
+        <!-- Page 3: Example Carousel -->
+        <div class="content">
+            <h2>See It in Action</h2>
+            <p>Here are three games that nail all 5 ingredients. Click through to see how:</p>
+            
+            <div class="carousel-container">
+                <div class="carousel-card active">
+                    <h3>Breakout / Brick Breaker</h3>
+                    <div class="ingredient">
+                        <strong>Goal:</strong> Destroy all the bricks before the ball falls past you
+                    </div>
+                    <div class="ingredient">
+                        <strong>Rules:</strong> You control a paddle. The ball bounces on walls and bricks. If it hits the bottom, you lose.
+                    </div>
+                    <div class="ingredient">
+                        <strong>Challenge:</strong> The ball gets faster, bricks are in different patterns, you have limited reaction time
+                    </div>
+                    <div class="ingredient">
+                        <strong>Choices:</strong> Where do you position your paddle? Aggressive or defensive?
+                    </div>
+                    <div class="ingredient">
+                        <strong>Feedback:</strong> Bricks vanish with a sound, score goes up, paddle lights up, ball changes color
+                    </div>
+                </div>
+                
+                <div class="carousel-card">
+                    <h3>Snake</h3>
+                    <div class="ingredient">
+                        <strong>Goal:</strong> Eat as much food as possible and get the highest score
+                    </div>
+                    <div class="ingredient">
+                        <strong>Rules:</strong> You move in four directions. You can't reverse into yourself. The board wraps around (or has walls).
+                    </div>
+                    <div class="ingredient">
+                        <strong>Challenge:</strong> As you eat, you grow longer and harder to control. The space gets cramped fast.
+                    </div>
+                    <div class="ingredient">
+                        <strong>Choices:</strong> Which direction do you move? Risk the center or play it safe near edges?
+                    </div>
+                    <div class="ingredient">
+                        <strong>Feedback:</strong> Your snake grows visibly, score updates, you hear a "pop" when you eat, game speeds up over time
+                    </div>
+                </div>
+                
+                <div class="carousel-card">
+                    <h3>Flappy Bird</h3>
+                    <div class="ingredient">
+                        <strong>Goal:</strong> Fly as far as possible without hitting pipes or the ground
+                    </div>
+                    <div class="ingredient">
+                        <strong>Rules:</strong> You tap to make the bird fly up. Gravity pulls you down. Pipes move toward you constantly.
+                    </div>
+                    <div class="ingredient">
+                        <strong>Challenge:</strong> One-pixel-perfect gaps. The timing is tight. One mistake and it's over.
+                    </div>
+                    <div class="ingredient">
+                        <strong>Choices:</strong> When do you tap? Aim for the center or take risks?
+                    </div>
+                    <div class="ingredient">
+                        <strong>Feedback:</strong> Score jumps up with a sound each time you pass a pipe, screen shakes, you hear a "thud" when you crash
+                    </div>
+                </div>
+                
+                <div class="carousel-controls">
+                    <button onclick="carouselPrev()">← Previous</button>
+                    <span id="carousel-counter">1 / 3</span>
+                    <button onclick="carouselNext()">Next →</button>
+                </div>
+            </div>
+            
+            <p style="margin-top: 25px;"><strong>Notice:</strong> All three games are simple. One core mechanic. But they all feel tight because all 5 ingredients work together.</p>
+        </div>
+        
+        <!-- Page 4: What Makes Games Fun with Accordion -->
+        <div class="content">
+            <h2>What Actually Makes a Game Fun?</h2>
+            <p>When you're starting out, focus on games with one or two of these DNA strands:</p>
+            
+            <div class="accordion">
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        🎁 Immediate Feedback & Progression
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Games like clickers and idle games. You do something, you see the result instantly. Numbers go up. Every action has a visible consequence.</p>
+                        <p><strong>Example:</strong> Cookie Clicker. One click = instant feedback. It's addictive because it's satisfying.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        ⚔️ Skill & Tension
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Games like Flappy Bird, Snake, or Dodge. You're trying not to lose. There's a fail state that's always seconds away. You get better over time. This scratches the "mastery" itch.</p>
+                        <p><strong>Example:</strong> Flappy Bird. One wrong tap and you're done. The pressure keeps you engaged.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        🎯 One Core Mechanic Done Really Well
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Breakout. Pong. Tetris. These games aren't "about" depth—they're about <strong>feeling good</strong>. When you hit the ball, it feels right. The controls respond instantly.</p>
+                        <p><strong>Example:</strong> Breakout. Hitting the ball with the paddle feels amazing because the timing is tight and the feedback is immediate.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 25px;"><strong>Pro tip:</strong> Start with <strong>ONE</strong> of these. Don't try to build a story-rich RPG with 50 mechanics. Pick one thing and make it feel amazing.</p>
+        </div>
+        
+        <!-- Page 5: Start 2D, Start Solo with Info Popups -->
+        <div class="content">
+            <h2>Start 2D. Start Solo.</h2>
+            <p>This isn't a limitation—it's a feature.</p>
+            
+            <div class="highlight-box">
+                <div>
+                    <p><strong>2D = Faster to Code & Easier to Polish</strong></p>
+                </div>
+                <button class="info-btn" onclick="openModal('modal-2d')">Learn more</button>
+            </div>
+            
+            <div class="highlight-box">
+                <div>
+                    <p><strong>Single-Player = No Networking Headaches</strong></p>
+                </div>
+                <button class="info-btn" onclick="openModal('modal-solo')">Learn more</button>
+            </div>
+            
+            <p>Every game you see today started somewhere small. The developer didn't try to build their masterpiece on day one. They built something <strong>tight</strong>. Then they expanded.</p>
+        </div>
+        
+        <!-- Modal 1: 2D -->
+        <div class="modal" id="modal-2d">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('modal-2d')">&times;</button>
+                <h2>Why 2D?</h2>
+                <p>3D requires way more art, physics, and processing power. Your GPU has to work hard. Your artists have to model everything in three dimensions. Your code gets complicated fast.</p>
+                <p><strong>2D lets you focus on what actually matters:</strong> making the core game loop feel good.</p>
+                <p>You can build, test, and refine a 2D game in <strong>hours</strong> instead of weeks. You can ship something that feels polished and tight, not bloated and half-finished.</p>
+                <p>Plus, on a Chromebook with a browser, 2D runs smoothly. 3D might choke.</p>
+            </div>
+        </div>
+        
+        <!-- Modal 2: Solo -->
+        <div class="modal" id="modal-solo">
+            <div class="modal-content">
+                <button class="close-btn" onclick="closeModal('modal-solo')">&times;</button>
+                <h2>Why Single-Player?</h2>
+                <p>Multiplayer sounds fun, but it adds:</p>
+                <ul>
+                    <li>Servers (cost money, need maintenance)</li>
+                    <li>Lag & latency issues (feels bad to play)</li>
+                    <li>Matchmaking (complex code)</li>
+                    <li>Debugging nightmares (two+ players = exponential complexity)</li>
+                </ul>
+                <p><strong>Single-player means you control the experience.</strong> You can focus on the game, not the infrastructure. You can make it feel amazing without worrying about a tenth of the complexity.</p>
+                <p>Once you nail single-player, then you can think about multiplayer.</p>
+            </div>
+        </div>
+        
+        <!-- Page 6: From Idea to Playable -->
+        <div class="content">
+            <h2>From Idea to Playable</h2>
+            <p>Here's how professionals actually make games:</p>
+            
+            <div class="accordion">
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        1. Rough Concept
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>You have an idea. "I want a game where you dodge falling objects." That's it. One sentence. Don't overthink it.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        2. The Core Loop
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>What's the <strong>one thing</strong> the player does over and over?</p>
+                        <p>In dodge games: "Move left/right" → "Avoid object" → "Repeat."</p>
+                        <p>Strip away everything else. The core loop is sacred.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        3. Test & Refine
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Build a playable version. Play it 50 times. Ask: "Is this fun?"</p>
+                        <p>If yes, keep it. If no, figure out what's broken.</p>
+                        <p>Maybe the difficulty curve is wrong. Maybe the controls feel sluggish. Maybe it's just boring. Fix it.</p>
+                    </div>
+                </div>
+                
+                <div class="accordion-item" onclick="toggleAccordion(this)">
+                    <div class="accordion-header">
+                        4. Polish & Expand
+                        <span class="accordion-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <p>Once the core feels right, add layers: visual feedback, sounds, difficulty progression, menus.</p>
+                        <p>But the game was <strong>already fun</strong> before you added any of that.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>Real example:</strong> Flappy Bird was built in a few days. The core mechanic (tap to fly) was tested and felt right. Everything else just made it more polished. It wasn't complex—it was <strong>focused</strong>.</p>
+            </div>
+        </div>
+        
+        <!-- Page 7: Your Turn -->
+        <div class="content">
+            <h2>Your Turn – Write One Sentence</h2>
+            <p>Now it's time to start thinking like a game designer. Write your game concept as one sentence:</p>
+            
+            <div class="input-section">
+                <label for="game-concept">"I want a game where you ________ to ________ while ________."</label>
+                <textarea id="game-concept" placeholder="Example: I want a game where you click mushrooms to earn points while avoiding toxic spores."></textarea>
+            </div>
+            
+            <p style="margin-top: 20px;"><strong>Tips:</strong></p>
+            <ul>
+                <li>Keep it simple. One core mechanic.</li>
+                <li>Make it about <strong>what the player does</strong>, not the story.</li>
+                <li>Think about the 5 ingredients—does your sentence hint at them?</li>
+            </ul>
+        </div>
+        
+        <!-- Page 8: Bonus - Polish & Juice -->
+        <div class="content">
+            <h2>Bonus: What Separates Okay Games from Great Ones?</h2>
+            <p>The fundamentals get you a working game. These details get you a game people <strong>want to play again</strong>.</p>
+            
+            <div class="bonus-section">
+                <h3>✓ The Details That Matter</h3>
+                
+                <div class="accordion">
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            Onboarding (Teaching Controls)
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Never assume the player knows what to do. Show them in-game.</p>
+                            <p>"Press SPACE to jump" or "Click to fire."</p>
+                            <p>Make it impossible to fail at first. Let them learn before the real challenge starts.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            Juice (Feedback & Polish)
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>This is the difference between a boring game and a satisfying one. When you hit something, does it feel like you hit it?</p>
+                            <p>Add sounds, screen shake, particles, animations. Not bloat—just <strong>feeling</strong>. Every action should have a reaction.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            Clear Motivation
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Why should the player care? What are they working toward? A high score? Survival? Helping a character?</p>
+                            <p>Make it obvious. Even if it's just "beat your last score," the player needs to know what winning looks like.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            Pacing (Start Easy, Ramp Up)
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>Don't throw your hardest challenge at the player immediately. Let them win at first. Build confidence.</p>
+                            <p>Then slowly increase the difficulty. This keeps them engaged instead of frustrated.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            Polish Over Scope
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <p>A polished 5-minute game beats an unfinished 2-hour game.</p>
+                            <p>If you have two hours, use it to make one game feel incredible, not to build two mediocre games. Quality over quantity.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Page 9: Key Takeaways -->
+        <div class="content">
+            <h2>Key Takeaways</h2>
+            
+            <div class="highlight-box">
+                <div>
+                    <p>✓ Every game needs <strong>Goal, Rules, Challenge, Choices, and Feedback</strong></p>
+                    <p>✓ Start with <strong>one core mechanic</strong> that feels right</p>
+                    <p>✓ <strong>2D and single-player</strong> let you focus on what matters</p>
+                    <p>✓ Build → Test → Refine → Polish (in that order)</p>
+                    <p>✓ <strong>Juice matters.</strong> Details make games feel alive.</p>
+                    <p>✓ One tight, polished game > ten half-finished games</p>
+                </div>
+            </div>
+            
+            <p style="margin-top: 30px; font-size: 1.1em;"><strong>You're ready.</strong> In the next module, you'll learn how to write a prompt that gets an AI to build your game. Then you'll make it real.</p>
+        </div>
+        
+        <div class="nav-buttons">
+            <button onclick="prevPage()" id="prev-btn">← Previous</button>
+            <button onclick="nextPage()" id="next-btn">Next →</button>
+        </div>
+    </div>
+    
+    <script>
+        let currentPage = 0;
+        const totalPages = 9;
+        
+        function updatePage() {
+            const pages = document.querySelectorAll('.content');
+            pages.forEach((p, i) => {
+                p.classList.remove('active');
+                if (i === currentPage) {
+                    p.classList.add('active');
+                }
+            });
+            
+            document.getElementById('prev-btn').disabled = currentPage === 0;
+            document.getElementById('next-btn').disabled = currentPage === totalPages - 1;
+            
+            const progressPercent = ((currentPage + 1) / totalPages) * 100;
+            document.querySelector('.progress-fill').style.width = progressPercent + '%';
+            window.scrollTo(0, 0);
+        }
+        
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                updatePage();
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                updatePage();
+            }
+        }
+        
+        
+        let carouselIndex = 0;
+        
+        function updateCarousel() {
+            const cards = document.querySelectorAll('.carousel-card');
+            cards.forEach((c, i) => {
+                c.classList.remove('active');
+                if (i === carouselIndex) {
+                    c.classList.add('active');
+                }
+            });
+            document.getElementById('carousel-counter').textContent = `${carouselIndex + 1} / 3`;
+        }
+        
+        function carouselNext() {
+            if (carouselIndex < 2) {
+                carouselIndex++;
+                updateCarousel();
+            }
+        }
+        
+        function carouselPrev() {
+            if (carouselIndex > 0) {
+                carouselIndex--;
+                updateCarousel();
+            }
+        }
+        
+        function toggleAccordion(el) {
+            const accordion = el.closest('.accordion');
+            const allItems = accordion.querySelectorAll('.accordion-item');
+            
+            allItems.forEach(item => {
+                if (item !== el) {
+                    item.classList.remove('active');
+                }
+            });
+            
+            el.classList.toggle('active');
+        }
+        
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+        
+        updatePage();
+    </script>
+</body>
+</html>
