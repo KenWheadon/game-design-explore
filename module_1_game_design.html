@@ -11,6 +11,11 @@
         box-sizing: border-box;
       }
 
+      .flex {
+        display: flex;
+        align-items: anchor-center;
+      }
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -870,7 +875,11 @@
       <div class="content">
         <h2>Start 2D. Start Single-Player.</h2>
         <p>This is a feature, not a limitation.</p>
-
+        <p>
+          Every game you see today started somewhere small. The developer didn't
+          try to build their masterpiece on day one. They built something
+          <strong>tight</strong>. Then they expanded.
+        </p>
         <div class="highlight-box">
           <div>
             <p><strong>2D = Faster to Code & Easier to Polish</strong></p>
@@ -889,11 +898,13 @@
           </button>
         </div>
 
-        <p>
-          Every game you see today started somewhere small. The developer didn't
-          try to build their masterpiece on day one. They built something
-          <strong>tight</strong>. Then they expanded.
-        </p>
+        <div>
+          <img
+            src="images/simple-2d-single.jpg"
+            alt="Start Simple with 2D and Single-Player"
+            style="width: 100%; border-radius: 8px; margin-bottom: 20px"
+          />
+        </div>
       </div>
 
       <!-- Modal 1: 2D -->
@@ -997,7 +1008,8 @@
               <p>If yes, keep it. If no, figure out what's broken.</p>
               <p>
                 Maybe the difficulty curve is wrong. Maybe the controls feel
-                sluggish. Maybe it's just boring. Fix it.
+                sluggish. Maybe it's just boring. Try things out, and keep track
+                of what feels right.
               </p>
             </div>
           </div>
@@ -1022,10 +1034,10 @@
 
         <div class="highlight-box">
           <p>
-            <strong>Real example:</strong> Flappy Bird was built in a few days.
-            The core mechanic (tap to fly) was tested and felt right. Everything
-            else just made it more polished. It wasn't complex—it was
-            <strong>focused</strong>.
+            <strong>Real example:</strong> Flappy Bird was built in a few days
+            by a single person. The core mechanic (tap to fly) was tested and
+            felt right. Everything else just made it more polished. It was
+            <strong>focused</strong>, not complex.
           </p>
         </div>
       </div>
@@ -1049,16 +1061,28 @@
           ></textarea>
         </div>
 
-        <p style="margin-top: 20px"><strong>Tips:</strong></p>
-        <ul>
-          <li>Keep it simple. One core mechanic.</li>
-          <li>
-            Make it about <strong>what the player does</strong>, not the story.
-          </li>
-          <li>
-            Think about the 5 ingredients—does your sentence hint at them?
-          </li>
-        </ul>
+        <div class="flex">
+          <div>
+            <p style="margin-top: 20px"><strong>Tips:</strong></p>
+            <ul>
+              <li>Keep it simple. One core mechanic.</li>
+              <li>
+                Make it about <strong>what the player does</strong>, not the
+                story.
+              </li>
+              <li>
+                Think about the 5 ingredients—does your sentence hint at them?
+              </li>
+            </ul>
+          </div>
+          <div>
+            <img
+              src="images/5ingredients.jpg"
+              alt="Five Ingredients of a Game"
+              style="width: 100%; border-radius: 8px; margin-bottom: 20px"
+            />
+          </div>
+        </div>
       </div>
 
       <!-- Page 8: Bonus - Polish & Juice -->
@@ -1120,7 +1144,9 @@
                 </p>
                 <p>
                   Make it obvious. Even if it's just "beat your last score," the
-                  player needs to know what winning looks like.
+                  player needs to know what winning looks like. Sometimes it's
+                  as easy as adding a single story panel - this person stole
+                  your favorite sandwich, GET REVENGE!
                 </p>
               </div>
             </div>
@@ -1187,8 +1213,7 @@
 
         <p style="margin-top: 30px; font-size: 1.1em">
           <strong>You're ready.</strong> In the next module, you'll learn how to
-          write a prompt that gets an AI to build your game. Then you'll make it
-          real.
+          use AI to build your game.
         </p>
       </div>
 
