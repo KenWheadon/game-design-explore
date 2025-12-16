@@ -210,6 +210,35 @@
         margin-bottom: 15px;
       }
 
+      .tab-inner-content {
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .tab-inner-content .ingredients-list {
+        flex: 1;
+      }
+      .tab-inner-content .game-image {
+        flex: 0 0 200px; /* Do not grow, do not shrink, base width 200px */
+        width: 200px;
+      }
+      .tab-inner-content img {
+        width: 100%;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+      }
+
+      @media (max-width: 600px) {
+        .tab-inner-content {
+          flex-direction: column;
+        }
+        .tab-inner-content .game-image {
+          flex: 0 0 auto;
+          width: 100%;
+          margin-bottom: 20px;
+        }
+      }
+
       .tab-content .ingredient {
         margin: 12px 0;
         padding: 10px;
@@ -613,73 +642,94 @@
 
           <div class="tab-content active" id="breakout">
             <h3>Breakout / Brick Breaker</h3>
-            <div class="ingredient">
-              <strong>Goal:</strong> Destroy all the bricks before the ball
-              falls past you
-            </div>
-            <div class="ingredient">
-              <strong>Rules:</strong> You control a paddle. The ball bounces on
-              walls and bricks. If it hits the bottom, you lose.
-            </div>
-            <div class="ingredient">
-              <strong>Challenge:</strong> The ball gets faster, bricks are in
-              different patterns, you have limited reaction time
-            </div>
-            <div class="ingredient">
-              <strong>Choices:</strong> Where do you position your paddle?
-              Aggressive or defensive?
-            </div>
-            <div class="ingredient">
-              <strong>Feedback:</strong> Bricks vanish with a sound, score goes
-              up, paddle lights up, ball changes color
+            <div class="tab-inner-content">
+              <div class="ingredients-list">
+                <div class="ingredient">
+                  <strong>Goal:</strong> Destroy all the bricks before the ball
+                  falls past you
+                </div>
+                <div class="ingredient">
+                  <strong>Rules:</strong> You control a paddle. The ball bounces on
+                  walls and bricks. If it hits the bottom, you lose.
+                </div>
+                <div class="ingredient">
+                  <strong>Challenge:</strong> The ball gets faster, bricks are in
+                  different patterns, you have limited reaction time
+                </div>
+                <div class="ingredient">
+                  <strong>Choices:</strong> Where do you position your paddle?
+                  Aggressive or defensive?
+                </div>
+                <div class="ingredient">
+                  <strong>Feedback:</strong> Bricks vanish with a sound, score goes
+                  up, paddle lights up, ball changes color
+                </div>
+              </div>
+              <div class="game-image">
+                <img src="images/breakout-image.png" alt="Breakout game screenshot">
+              </div>
             </div>
           </div>
 
           <div class="tab-content" id="snake">
             <h3>Snake</h3>
-            <div class="ingredient">
-              <strong>Goal:</strong> Eat as much food as possible and get the
-              highest score
-            </div>
-            <div class="ingredient">
-              <strong>Rules:</strong> You move in four directions. You can't
-              reverse into yourself. The board wraps around (or has walls).
-            </div>
-            <div class="ingredient">
-              <strong>Challenge:</strong> As you eat, you grow longer and harder
-              to control. The space gets cramped fast.
-            </div>
-            <div class="ingredient">
-              <strong>Choices:</strong> Which direction do you move? Risk the
-              center or play it safe near edges?
-            </div>
-            <div class="ingredient">
-              <strong>Feedback:</strong> Your snake grows visibly, score
-              updates, you hear a "pop" when you eat, game speeds up over time
+            <div class="tab-inner-content">
+              <div class="ingredients-list">
+                <div class="ingredient">
+                  <strong>Goal:</strong> Eat as much food as possible and get the
+                  highest score
+                </div>
+                <div class="ingredient">
+                  <strong>Rules:</strong> You move in four directions. You can't
+                  reverse into yourself. The board wraps around (or has walls).
+                </div>
+                <div class="ingredient">
+                  <strong>Challenge:</strong> As you eat, you grow longer and harder
+                  to control. The space gets cramped fast.
+                </div>
+                <div class="ingredient">
+                  <strong>Choices:</strong> Which direction do you move? Risk the
+                  center or play it safe near edges?
+                </div>
+                <div class="ingredient">
+                  <strong>Feedback:</strong> Your snake grows visibly, score
+                  updates, you hear a "pop" when you eat, game speeds up over time
+                </div>
+              </div>
+              <div class="game-image">
+                <img src="images/snake.png" alt="Snake game screenshot">
+              </div>
             </div>
           </div>
 
           <div class="tab-content" id="flappy">
             <h3>Flappy Bird</h3>
-            <div class="ingredient">
-              <strong>Goal:</strong> Fly as far as possible without hitting
-              pipes or the ground
-            </div>
-            <div class="ingredient">
-              <strong>Rules:</strong> You tap to make the bird fly up. Gravity
-              pulls you down. Pipes move toward you constantly.
-            </div>
-            <div class="ingredient">
-              <strong>Challenge:</strong> One-pixel-perfect gaps. The timing is
-              tight. One mistake and it's over.
-            </div>
-            <div class="ingredient">
-              <strong>Choices:</strong> When do you tap? Aim for the center or
-              take risks?
-            </div>
-            <div class="ingredient">
-              <strong>Feedback:</strong> Score jumps up with a sound each time
-              you pass a pipe, screen shakes, you hear a "thud" when you crash
+            <div class="tab-inner-content">
+              <div class="ingredients-list">
+                <div class="ingredient">
+                  <strong>Goal:</strong> Fly as far as possible without hitting
+                  pipes or the ground
+                </div>
+                <div class="ingredient">
+                  <strong>Rules:</strong> You tap to make the bird fly up. Gravity
+                  pulls you down. Pipes move toward you constantly.
+                </div>
+                <div class="ingredient">
+                  <strong>Challenge:</strong> One-pixel-perfect gaps. The timing is
+                  tight. One mistake and it's over.
+                </div>
+                <div class="ingredient">
+                  <strong>Choices:</strong> When do you tap? Aim for the center or
+                  take risks?
+                </div>
+                <div class="ingredient">
+                  <strong>Feedback:</strong> Score jumps up with a sound each time
+                  you pass a pipe, screen shakes, you hear a "thud" when you crash
+                </div>
+              </div>
+              <div class="game-image">
+                <img src="images/fallybird.png" alt="Flappy Bird game screenshot">
+              </div>
             </div>
           </div>
         </div>
