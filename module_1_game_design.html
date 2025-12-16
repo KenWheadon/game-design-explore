@@ -512,6 +512,34 @@
         background: #667eea;
         transition: width 0.3s;
       }
+
+      /* Image Modal Styles */
+      #image-modal .modal-content {
+        max-width: 90%;
+        max-height: 85vh;
+        width: auto;
+        height: auto;
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+      }
+
+      #image-modal .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      #image-modal .close-btn:hover,
+      #image-modal .close-btn:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
@@ -646,27 +674,30 @@
               <div class="ingredients-list">
                 <div class="ingredient">
                   <strong>Goal:</strong> Destroy all the bricks before the ball
-                  falls past you
+                  falls past you.
                 </div>
                 <div class="ingredient">
-                  <strong>Rules:</strong> You control a paddle. The ball bounces on
-                  walls and bricks. If it hits the bottom, you lose.
+                  <strong>Rules:</strong> You control a paddle. The ball bounces
+                  on walls and bricks. If it hits the bottom, you lose.
                 </div>
                 <div class="ingredient">
-                  <strong>Challenge:</strong> The ball gets faster, bricks are in
-                  different patterns, you have limited reaction time
+                  <strong>Challenge:</strong> The ball gets faster, bricks are
+                  in different patterns, you have limited reaction time.
                 </div>
                 <div class="ingredient">
                   <strong>Choices:</strong> Where do you position your paddle?
                   Aggressive or defensive?
                 </div>
                 <div class="ingredient">
-                  <strong>Feedback:</strong> Bricks vanish with a sound, score goes
-                  up, paddle lights up, ball changes color
+                  <strong>Feedback:</strong> Bricks vanish with a sound, score
+                  goes up, paddle lights up, ball changes color.
                 </div>
               </div>
               <div class="game-image">
-                <img src="images/breakout-image.png" alt="Breakout game screenshot">
+                <img
+                  src="images/breakout-image.png"
+                  alt="Breakout game screenshot"
+                />
               </div>
             </div>
           </div>
@@ -676,28 +707,29 @@
             <div class="tab-inner-content">
               <div class="ingredients-list">
                 <div class="ingredient">
-                  <strong>Goal:</strong> Eat as much food as possible and get the
-                  highest score
+                  <strong>Goal:</strong> Eat as much food as possible and get
+                  the highest score.
                 </div>
                 <div class="ingredient">
                   <strong>Rules:</strong> You move in four directions. You can't
                   reverse into yourself. The board wraps around (or has walls).
                 </div>
                 <div class="ingredient">
-                  <strong>Challenge:</strong> As you eat, you grow longer and harder
-                  to control. The space gets cramped fast.
+                  <strong>Challenge:</strong> As you eat, you grow longer and
+                  harder to control. The space gets cramped fast.
                 </div>
                 <div class="ingredient">
-                  <strong>Choices:</strong> Which direction do you move? Risk the
-                  center or play it safe near edges?
+                  <strong>Choices:</strong> Which direction do you move? Risk
+                  the center or play it safe near edges?
                 </div>
                 <div class="ingredient">
                   <strong>Feedback:</strong> Your snake grows visibly, score
-                  updates, you hear a "pop" when you eat, game speeds up over time
+                  updates, you hear a "pop" when you eat, game speeds up over
+                  time.
                 </div>
               </div>
               <div class="game-image">
-                <img src="images/snake.png" alt="Snake game screenshot">
+                <img src="images/snake.png" alt="Snake game screenshot" />
               </div>
             </div>
           </div>
@@ -708,27 +740,31 @@
               <div class="ingredients-list">
                 <div class="ingredient">
                   <strong>Goal:</strong> Fly as far as possible without hitting
-                  pipes or the ground
+                  pipes or the ground.
                 </div>
                 <div class="ingredient">
-                  <strong>Rules:</strong> You tap to make the bird fly up. Gravity
-                  pulls you down. Pipes move toward you constantly.
+                  <strong>Rules:</strong> You tap to make the bird fly up.
+                  Gravity pulls you down. Pipes move toward you constantly.
                 </div>
                 <div class="ingredient">
-                  <strong>Challenge:</strong> One-pixel-perfect gaps. The timing is
-                  tight. One mistake and it's over.
+                  <strong>Challenge:</strong> One-pixel-perfect gaps. The timing
+                  is tight. One mistake and it's over.
                 </div>
                 <div class="ingredient">
-                  <strong>Choices:</strong> When do you tap? Aim for the center or
-                  take risks?
+                  <strong>Choices:</strong> When do you tap? Aim for the center
+                  or take risks?
                 </div>
                 <div class="ingredient">
-                  <strong>Feedback:</strong> Score jumps up with a sound each time
-                  you pass a pipe, screen shakes, you hear a "thud" when you crash
+                  <strong>Feedback:</strong> Score jumps up with a sound each
+                  time you pass a pipe, screen shakes, you hear a "thud" when
+                  you crash.
                 </div>
               </div>
               <div class="game-image">
-                <img src="images/fallybird.png" alt="Flappy Bird game screenshot">
+                <img
+                  src="images/fallybird.png"
+                  alt="Flappy Bird game screenshot"
+                />
               </div>
             </div>
           </div>
@@ -745,8 +781,8 @@
       <div class="content">
         <h2>What Actually Makes a Game Fun?</h2>
         <p>
-          When you're starting out, focus on games with one or two of these DNA
-          strands:
+          When you're starting out, focus on games with one or two of these
+          features:
         </p>
 
         <div class="accordion">
@@ -1155,6 +1191,12 @@
       </div>
     </div>
 
+    <!-- Image Modal -->
+    <div id="image-modal" class="modal">
+      <span class="close-btn" id="close-image-modal">&times;</span>
+      <img class="modal-content" id="modal-image" />
+    </div>
+
     <script>
       let currentPage = 0;
       const totalPages = 9;
@@ -1257,14 +1299,50 @@
         document.getElementById(id).classList.remove("active");
       }
 
+      function setupImageModal() {
+        const imageModal = document.getElementById("image-modal");
+        if (!imageModal) return;
+
+        const modalImg = document.getElementById("modal-image");
+        const gameImages = document.querySelectorAll(".game-image img");
+        const closeModalBtn = document.getElementById("close-image-modal");
+
+        gameImages.forEach((img) => {
+          img.style.cursor = "pointer"; // Add cursor pointer to indicate it's clickable
+          img.addEventListener("click", function () {
+            imageModal.classList.add("active");
+            modalImg.src = this.src;
+          });
+        });
+
+        // Function to close the modal
+        const closeImageModal = () => {
+          imageModal.classList.remove("active");
+        };
+
+        // Close when the 'x' is clicked
+        closeModalBtn.addEventListener("click", closeImageModal);
+
+        // Close when clicking outside the image
+        imageModal.addEventListener("click", function (event) {
+          if (event.target === imageModal) {
+            closeImageModal();
+          }
+        });
+      }
+
       window.onclick = function (event) {
         if (event.target.classList.contains("modal")) {
-          event.target.classList.remove("active");
+          // Do not close the image modal this way, it has its own logic
+          if (event.target.id !== "image-modal") {
+            event.target.classList.remove("active");
+          }
         }
       };
 
       updatePage();
       setupTabs();
+      setupImageModal();
     </script>
   </body>
 </html>
