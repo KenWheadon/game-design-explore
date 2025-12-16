@@ -540,6 +540,14 @@
         text-decoration: none;
         cursor: pointer;
       }
+
+      .accordion-content img {
+        width: 40%;
+        height: auto;
+        border-radius: 8px;
+        margin-left: 15px;
+        border: 1px solid #ddd;
+      }
     </style>
   </head>
   <body>
@@ -781,8 +789,8 @@
       <div class="content">
         <h2>What Actually Makes a Game Fun?</h2>
         <p>
-          When you're starting out, focus on games with one or two of these
-          features:
+          There are some easy things to focus on that will make a game fun, here
+          are three of them:
         </p>
 
         <div class="accordion">
@@ -801,6 +809,10 @@
                 <strong>Example:</strong> Cookie Clicker. One click = instant
                 feedback. It's addictive because it's satisfying.
               </p>
+              <img
+                src="images/cookie-clicker.png"
+                alt="Cookie Clicker game screenshot"
+              />
             </div>
           </div>
 
@@ -811,14 +823,18 @@
             </div>
             <div class="accordion-content">
               <p>
-                Games like Flappy Bird, Snake, or Dodge. You're trying not to
-                lose. There's a fail state that's always seconds away. You get
-                better over time. This scratches the "mastery" itch.
+                Games like Geomatry Dash, Flappy Bird, or Snake. You're trying
+                not to lose. There's a fail state that's always seconds away.
+                You get better over time. This scratches the "mastery" itch.
               </p>
               <p>
-                <strong>Example:</strong> Flappy Bird. One wrong tap and you're
-                done. The pressure keeps you engaged.
+                <strong>Example:</strong> Geometry Dash. One wrong tap and
+                you're done. The pressure keeps you engaged.
               </p>
+              <img
+                src="images/geo-dash.png"
+                alt="Geometry Dash game screenshot"
+              />
             </div>
           </div>
 
@@ -834,10 +850,11 @@
                 feels right. The controls respond instantly.
               </p>
               <p>
-                <strong>Example:</strong> Breakout. Hitting the ball with the
-                paddle feels amazing because the timing is tight and the
+                <strong>Example:</strong> Tetris. Lining up the blocks and
+                making a line feels amazing because the timing is tight and the
                 feedback is immediate.
               </p>
+              <img src="images/tetris.png" alt="Tetris game screenshot" />
             </div>
           </div>
         </div>
@@ -851,8 +868,8 @@
 
       <!-- Page 5: Start 2D, Start Solo with Info Popups -->
       <div class="content">
-        <h2>Start 2D. Start Solo.</h2>
-        <p>This isn't a limitation—it's a feature.</p>
+        <h2>Start 2D. Start Single-Player.</h2>
+        <p>This is a feature, not a limitation.</p>
 
         <div class="highlight-box">
           <div>
@@ -888,12 +905,12 @@
           <h2>Why 2D?</h2>
           <p>
             3D requires way more art, physics, and processing power. Your GPU
-            has to work hard. Your artists have to model everything in three
-            dimensions. Your code gets complicated fast.
+            has to work hard and your code gets complicated fast. There are also
+            a lot more steps to develop 3D games and make them feel fun.
           </p>
           <p>
             <strong>2D lets you focus on what actually matters:</strong> making
-            the core game loop feel good.
+            the core game loop feel good, and doing it quickly.
           </p>
           <p>
             You can build, test, and refine a 2D game in
@@ -919,14 +936,12 @@
             <li>Servers (cost money, need maintenance)</li>
             <li>Lag & latency issues (feels bad to play)</li>
             <li>Matchmaking (complex code)</li>
-            <li>
-              Debugging nightmares (two+ players = exponential complexity)
-            </li>
+            <li>Debugging nightmares (two+ players = lots of complexity)</li>
           </ul>
           <p>
             <strong>Single-player means you control the experience.</strong> You
             can focus on the game, not the infrastructure. You can make it feel
-            amazing without worrying about a tenth of the complexity.
+            amazing without worrying added complexity.
           </p>
           <p>
             Once you nail single-player, then you can think about multiplayer.
@@ -1281,14 +1296,16 @@
       function toggleAccordion(el) {
         const accordion = el.closest(".accordion");
         const allItems = accordion.querySelectorAll(".accordion-item");
+        const wasActive = el.classList.contains("active");
 
         allItems.forEach((item) => {
-          if (item !== el) {
-            item.classList.remove("active");
-          }
+          item.classList.remove("active"); // Deactivate all
         });
 
-        el.classList.toggle("active");
+        if (!wasActive) {
+          // If the clicked one was not active, activate it
+          el.classList.add("active");
+        }
       }
 
       function openModal(id) {
@@ -1304,12 +1321,15 @@
         if (!imageModal) return;
 
         const modalImg = document.getElementById("modal-image");
-        const gameImages = document.querySelectorAll(".game-image img");
+        const gameImages = document.querySelectorAll(
+          ".game-image img, .accordion-content img"
+        );
         const closeModalBtn = document.getElementById("close-image-modal");
 
         gameImages.forEach((img) => {
           img.style.cursor = "pointer"; // Add cursor pointer to indicate it's clickable
-          img.addEventListener("click", function () {
+          img.addEventListener("click", function (event) {
+            event.stopPropagation(); // Prevent event from bubbling up to accordion-item
             imageModal.classList.add("active");
             modalImg.src = this.src;
           });
