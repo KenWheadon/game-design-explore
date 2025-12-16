@@ -11,6 +11,11 @@
         box-sizing: border-box;
       }
 
+      .flex {
+        display: flex;
+        align-items: anchor-center;
+      }
+
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -114,9 +119,13 @@
 
       /* MAGIC LINES BOX */
       .magic-lines {
+        text-align: left;
+        font-size: 1.2rem;
+      }
+      .magic-lines ul li {
         background: #2d2d2d;
         color: #f8f8f2;
-        padding: 20px;
+        padding: 8px;
         border-radius: 6px;
         margin: 20px 0;
         font-family: "Courier New", monospace;
@@ -172,7 +181,8 @@
         color: #667eea;
       }
 
-      .highlight-box ul {
+      .highlight-box ul,
+      .highlight-box ol {
         margin-left: 25px;
         margin-top: 15px;
       }
@@ -523,6 +533,62 @@
         display: block;
         animation: fadeIn 0.3s ease-in;
       }
+
+      /* FLIP CARD */
+      .flip-card {
+        background-color: transparent;
+        width: 100%;
+        max-width: 500px; /* Or other desired width */
+        height: 300px; /* Adjust as needed */
+        perspective: 1000px;
+        margin: 20px auto;
+        cursor: pointer;
+      }
+
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .flip-card.clicked .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .flip-card-front,
+      .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .flip-card-front {
+        background-color: #bbb;
+        color: black;
+      }
+
+      .flip-card-front img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .flip-card-back {
+        background-color: #2d2d2d;
+        color: white;
+        transform: rotateY(180deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
     </style>
   </head>
   <body>
@@ -546,24 +612,40 @@
 
         <p>
           The best games aren't built in one request. They're built through
-          <strong>precision iteration</strong>:
+          <strong> iteration</strong>:
         </p>
 
-        <div class="core-loop">
-          <div class="loop-item">
-            <strong>1. Ask</strong> – Give the AI a clear, specific prompt
+        <div class="flex">
+          <div>
+            <div class="core-loop">
+              <div class="loop-item">
+                <strong>1. Ask</strong> – Give the AI a clear, specific prompt
+              </div>
+              <div class="loop-item">
+                <strong>2. Receive</strong> – Get your playable game back
+              </div>
+              <div class="loop-item">
+                <strong>3. Test</strong> – Play it, find what's missing
+              </div>
+              <div class="loop-item">
+                <strong>4. Refine</strong> – Tell the AI exactly what to fix
+              </div>
+              <div class="loop-item">
+                <strong>5. Repeat</strong> – Usually 3-5 times per game
+              </div>
+            </div>
           </div>
-          <div class="loop-item">
-            <strong>2. Receive</strong> – Get your playable game back
-          </div>
-          <div class="loop-item">
-            <strong>3. Test</strong> – Play it, find what's missing
-          </div>
-          <div class="loop-item">
-            <strong>4. Refine</strong> – Tell the AI exactly what to fix
-          </div>
-          <div class="loop-item">
-            <strong>5. Repeat</strong> – Usually 3-5 times per game
+          <div>
+            <img
+              src="images/prompt-mod3.jpg"
+              alt="Prompt Like a Pro"
+              style="
+                width: 100%;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                margin-left: 15px;
+              "
+            />
           </div>
         </div>
 
@@ -575,22 +657,35 @@
 
       <!-- PAGE 2: THE 4 MAGIC LINES -->
       <div class="content">
-        <h2>Start Every Prompt With These 4 Lines</h2>
+        <h2>Start Every Prompt With These 3 Lines</h2>
         <p>
           Before you ask for anything, set the stage. Every single game prompt
           should start with these lines:
         </p>
 
-        <div class="magic-lines">
-          Create a complete HTML5 game with the following specifications: - The
-          entire game must work in a single .HTML file - Use only vanilla
-          JavaScript (no external libraries except for sounds/images) - Make it
-          fun, playable, and polished from the start - Include a game-over state
-          and a way to restart
+        <div class="flip-card" onclick="this.classList.toggle('clicked')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front">
+              <img
+                src="images/3-lines.jpg"
+                alt="The three magic lines"
+                style="width: 100%; height: 100%; object-fit: cover"
+              />
+            </div>
+            <div class="flip-card-back">
+              <div class="magic-lines">
+                <ul>
+                  <li>Create a single file HTML/javascript game</li>
+                  <li>Use emojis as placeholders</li>
+                  <li>Include a game-over state and a way to restart</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="info-button-group">
-          <p>Why these 4 lines?</p>
+          <p>Why these 3 lines?</p>
           <button class="info-btn" onclick="openModal('modal-magic-lines')">
             Learn More
           </button>
@@ -603,27 +698,21 @@
           <button class="close-btn" onclick="closeModal('modal-magic-lines')">
             &times;
           </button>
-          <h2>Why These 4 Lines?</h2>
+          <h2>Why These 3 Lines?</h2>
           <ul>
             <li>
               <strong>They prevent overthinking</strong> – The AI knows exactly
-              what format you want
+              what format you want and creates a game with no external libraries
+              = no dependencies, easy to share.
             </li>
             <li>
-              <strong>They force a complete game</strong> – You get a runnable
-              file, not broken pieces
-            </li>
-            <li>
-              <strong>They set clear expectations</strong> – No external
-              libraries = no dependencies, easy to share
-            </li>
-            <li>
-              <strong>They guarantee shareability</strong> – Single .HTML = can
-              email it, upload it, paste it anywhere
+              <strong>They guarantee placeholders early</strong> – No need to
+              get art when starting, emojis are a great early placeholder for
+              most art you'll need when starting out.
             </li>
             <li>
               <strong>They establish scope</strong> – The AI knows you want
-              something polished and playable NOW, not a framework to build on
+              something playable NOW, not a framework to build on.
             </li>
           </ul>
         </div>
@@ -664,84 +753,59 @@
         </ul>
 
         <p>
-          The weirder and more specific, the better. The AI's job is to execute
-          your vision, not guess it.
+          The more specific, the better. The AI's job is to execute your vision,
+          not guess it.
         </p>
-
-        <div class="info-button-group">
-          <p>Why does specificity matter?</p>
-          <button class="info-btn" onclick="openModal('modal-specificity')">
-            Learn More
-          </button>
-        </div>
-      </div>
-
-      <!-- Modal: Specificity -->
-      <div class="modal" id="modal-specificity">
-        <div class="modal-content">
-          <button class="close-btn" onclick="closeModal('modal-specificity')">
-            &times;
-          </button>
-          <h2>Why Specificity Matters</h2>
-          <ul>
-            <li>
-              <strong
-                >Vague requests like "make it fun" mean different things</strong
-              >
-              – to you, to me, to the AI. Specific = no ambiguity
-            </li>
-            <li>
-              <strong>The AI doesn't know your visual style</strong> – Does
-              "game" mean retro pixel art? Neon glow? Minimalist? You have to
-              say
-            </li>
-            <li>
-              <strong>It cuts iteration time in half</strong> – You get closer
-              to what you actually want on the first try
-            </li>
-            <li>
-              <strong>Weird themes are memorable</strong> – "Screaming avocado"
-              is way more interesting than "generic clicker." Your game will
-              stand out
-            </li>
-            <li>
-              <strong>The AI can execute what you describe</strong> – But it
-              can't read your mind. Specificity = execution
-            </li>
-          </ul>
+        <div class="highlight-box">
+          <p>
+            <strong>Weird themes are memorable</strong>
+          </p>
+          <p>
+            "Screaming avocado" is way more interesting than "generic clicker."
+            Your game will stand out easier this way.
+          </p>
         </div>
       </div>
 
       <!-- PAGE 4: TIP 2 - UPGRADES -->
       <div class="content">
-        <h2>Tip 2: Add Layers With Upgrades & Progression</h2>
+        <h2>Tip 2: Layer in Upgrades & Progression</h2>
         <p>
           A game where you just click is fun for 30 seconds. A game where you
           click to earn currency, then spend it on upgrades, is fun for 30
           minutes.
         </p>
 
-        <p>Add this to any clicker or collection game:</p>
-
         <h3>Template:</h3>
         <div class="highlight-box">
-          <p>
-            "Include an upgrades shop that opens when the player presses U. Show
-            3 upgrades: [Upgrade 1], [Upgrade 2], [Upgrade 3]. Each upgrade
-            costs [X currency] and provides [bonus effect]. Once bought,
-            upgrades are permanent."
-          </p>
+          <ol>
+            <li>
+              Include an upgrades shop that opens when the player presses an
+              'upgrades' button.
+            </li>
+            <li>Show 3 upgrades: [Upgrade 1], [Upgrade 2], [Upgrade 3].</li>
+            <li>
+              Each upgrade costs [X currency] and provides [bonus effect].
+              Upgrades are permanent.
+            </li>
+          </ol>
         </div>
 
         <h3>Example:</h3>
         <div class="highlight-box">
           <p>
-            "Include an upgrades shop that opens when the player presses U. Show
-            3 upgrades: Double Click (costs 50 guac, doubles points per click),
-            Auto Clicker (costs 200 guac, gains 1 guac per second), and Golden
-            Avocado (costs 500 guac, triples all currency earned). Once bought,
-            upgrades are permanent."
+            "Include an upgrades shop that opens when the player presses an
+            upgrade button in the top left corner of the screen. Show 3
+            upgrades:
           </p>
+          <ol>
+            <li>Double Click (costs 50 guac, doubles points per click)</li>
+            <li>
+              Golden Avocado (costs 1000 guac, triples all currency earned).
+            </li>
+            <li>Auto Clicker (costs 200 guac, gains 1 guac per second)</li>
+          </ol>
+          <p>Once bought upgrades are permanent."</p>
         </div>
 
         <p>
@@ -797,14 +861,12 @@
           unforgettable.
         </p>
 
-        <p>Add this to any prompt:</p>
-
         <h3>Template:</h3>
         <div class="highlight-box">
           <p>
             "Add visual juice: particle effects when [action], screen shake when
             [event], and a satisfying sound effect for [interaction]. Make the
-            [object] grow slightly when clicked and return to normal size."
+            [object] grow slightly when clicked and then return to normal size."
           </p>
         </div>
 
@@ -813,9 +875,9 @@
           <p>
             "Add visual juice: particle effects (confetti or sparkles) when the
             avocado is clicked, screen shake (subtle, 100ms) when reaching a
-            milestone (every 10 guacs), and a satisfying 'pop' sound for each
-            click. Make the avocado grow 10% when clicked and return to normal
-            size over 200ms."
+            milestone (every 10 guacs earned), and a satisfying 'pop' sound for
+            each click. Make the avocado grow 10% when clicked and return to
+            normal size over 200ms."
           </p>
         </div>
 
@@ -857,8 +919,8 @@
               clicker with particles and sounds feels way more complex
             </li>
             <li>
-              <strong>It's free</strong> – Particle effects and sounds cost
-              nothing to add and cost a lot to remove
+              <strong>It's cheap</strong> – Particle effects and sounds cost
+              almost nothing to add
             </li>
           </ul>
         </div>
@@ -897,18 +959,33 @@
           </div>
         </div>
 
-        <p>Surgical prompts:</p>
-        <ul>
-          <li>Describe the problem in detail</li>
-          <li>Specify exactly what to change</li>
-          <li>Give numbers when possible (sizes, timing, colors)</li>
-        </ul>
-
-        <div class="info-button-group">
-          <p>Why be surgical?</p>
-          <button class="info-btn" onclick="openModal('modal-surgical')">
-            Learn More
-          </button>
+        <div class="flex">
+          <div>
+            <p>Surgical prompts:</p>
+            <ul>
+              <li>Describe the problem in detail</li>
+              <li>Specify exactly what to change</li>
+              <li>Give numbers when possible (sizes, timing, colors)</li>
+            </ul>
+            <div class="info-button-group">
+              <p>Why be surgical?</p>
+              <button class="info-btn" onclick="openModal('modal-surgical')">
+                Learn More
+              </button>
+            </div>
+          </div>
+          <div>
+            <img
+              src="images/sur.jpg"
+              alt=""
+              style="
+                width: 60%;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                margin-left: 30%;
+              "
+            />
+          </div>
         </div>
       </div>
 
@@ -927,7 +1004,7 @@
             </li>
             <li>
               <strong>Specific fixes keep your game stable</strong> – You're
-              tweaking one aspect, not rewriting
+              tweaking one aspect at a time
             </li>
             <li>
               <strong>Numbers prevent ambiguity</strong> – The AI knows exactly
@@ -947,7 +1024,7 @@
 
       <!-- PAGE 7: COMMON PITFALLS -->
       <div class="content">
-        <h2>Avoid These Beginner Mistakes</h2>
+        <h2>Remember to Avoid These Beginner Mistakes</h2>
         <p>
           Some requests sound good but will waste your time. Learn what to
           avoid:
@@ -1015,32 +1092,9 @@
               </p>
               <p>
                 <strong>What to ask instead:</strong> Start with one core
-                mechanic: "Make a text-based dungeon crawler where I choose
-                left/right at each turn and fight one type of enemy" — then
-                iterate and expand from there.
-              </p>
-            </div>
-          </div>
-
-          <div class="accordion-item" onclick="toggleAccordion(this)">
-            <div class="accordion-header">
-              Don't Ask for External APIs
-              <span class="accordion-icon">▼</span>
-            </div>
-            <div class="accordion-content">
-              <p>
-                <strong>Why it's a trap:</strong> Your single .HTML file can't
-                reliably pull data from the internet. APIs require
-                authentication, handling errors, CORS, and backend setup.
-              </p>
-              <p>
-                <strong>Keep it local.</strong> A single .HTML file can't do
-                backend stuff.
-              </p>
-              <p>
-                <strong>What to ask instead:</strong> "Use in-game data only" or
-                "Generate random data locally" or "Let the player input their
-                own data"
+                mechanic: "Make a monster fighter where I click on monsters to
+                deal damage. The monsters appear randomly on screen and have 1-3
+                health points."
               </p>
             </div>
           </div>
@@ -1068,278 +1122,13 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- PAGE 8: STARTER TEMPLATES -->
-      <div class="content">
-        <h2>Copy. Paste. Build.</h2>
-        <p>
-          Here are 3 complete starter templates. Copy the 4 magic lines first,
-          then paste the template below. Customize the bracketed sections and
-          hit send.
-        </p>
-
-        <div class="tab-buttons">
-          <button
-            class="tab-btn active"
-            onclick="switchTab(event, 'tab-template-1')"
-          >
-            Action/Clicker
-          </button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-template-2')">
-            Puzzle/Memory
-          </button>
-          <button class="tab-btn" onclick="switchTab(event, 'tab-template-3')">
-            Narrative/Choice
-          </button>
-        </div>
-
-        <!-- Template 1 -->
-        <div id="tab-template-1" class="tab-content active">
-          <div class="template-box">
-            <h4>Theme:</h4>
-            <p>[Your theme: e.g., "clicking mushrooms to earn spore points"]</p>
-
-            <h4 style="margin-top: 20px">Core Mechanic:</h4>
-            <p>
-              The player clicks a [clickable object] to earn [currency]. Each
-              click earns [amount]. Display a [currency name] counter at the
-              top.
-            </p>
-
-            <h4>Win Condition:</h4>
-            <p>
-              When the player reaches [number], show a "YOU WIN!" screen with
-              final [currency] amount. Add a restart button.
-            </p>
-
-            <h4>Upgrades Shop (press U):</h4>
-            <p>Show 3 purchasable upgrades:</p>
-            <ul style="margin-left: 25px; margin-top: 10px">
-              <li>[Upgrade 1]: Costs [X currency], [bonus effect]</li>
-              <li>[Upgrade 2]: Costs [X currency], [bonus effect]</li>
-              <li>[Upgrade 3]: Costs [X currency], [bonus effect]</li>
-            </ul>
-
-            <h4>Polish:</h4>
-            <p>
-              Add particle effects when clicking, screen shake on milestones,
-              and a satisfying click sound. Make the clickable object slightly
-              scale up on click and return to normal.
-            </p>
-
-            <div class="template-controls">
-              <button class="info-btn" onclick="openModal('modal-template-1')">
-                See Full Example
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Template 2 -->
-        <div id="tab-template-2" class="tab-content">
-          <div class="template-box">
-            <h4>Theme:</h4>
-            <p>[Your theme: e.g., "matching cat memes"]</p>
-
-            <h4 style="margin-top: 20px">Core Mechanic:</h4>
-            <p>
-              Display a grid of [X] cards face-down. When clicked, a card flips
-              to reveal a [type of item: images, words, etc.]. The player must
-              match [matching rule: identical pairs, related pairs, etc.].
-            </p>
-
-            <h4>Win Condition:</h4>
-            <p>
-              When all pairs are matched, show a "PUZZLE SOLVED!" screen with
-              the number of tries it took. Add a restart button.
-            </p>
-
-            <h4>Difficulty:</h4>
-            <p>[Optional progression: harder grids, timer, limited moves]</p>
-
-            <h4>Polish:</h4>
-            <p>
-              Add a flip animation when cards turn over, a satisfying sound for
-              correct matches, and a buzzer sound for incorrect matches. Make
-              correct matches glow or stay highlighted.
-            </p>
-
-            <div class="template-controls">
-              <button class="info-btn" onclick="openModal('modal-template-2')">
-                See Full Example
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Template 3 -->
-        <div id="tab-template-3" class="tab-content">
-          <div class="template-box">
-            <h4>Theme:</h4>
-            <p>[Your theme: e.g., "a short sci-fi adventure"]</p>
-
-            <h4 style="margin-top: 20px">Core Mechanic:</h4>
-            <p>
-              Present a scene with text description. Offer [number] choices
-              (buttons). Each choice leads to a new scene with different text
-              and new choices.
-            </p>
-
-            <h4>Structure:</h4>
-            <p>
-              Create a branching story with at least [number] unique scenes.
-              Each scene should have:
-            </p>
-            <ul style="margin-left: 25px; margin-top: 10px">
-              <li>A text description of what's happening</li>
-              <li>[Number] clickable choice buttons</li>
-              <li>
-                One choice leads to a win/ending, others to different outcomes
-              </li>
-            </ul>
-
-            <h4>Win Conditions:</h4>
-            <p>
-              Create [number] possible endings. At least one should be a "good"
-              ending and one should be a "bad" ending. Show end-game text and a
-              restart button.
-            </p>
-
-            <h4>Polish:</h4>
-            <p>
-              Add a title screen before the story begins. Use different colors
-              or fonts to distinguish choice buttons. Add background music or
-              ambient sounds. Make choices feel responsive with hover effects
-              and click sounds.
-            </p>
-
-            <div class="template-controls">
-              <button class="info-btn" onclick="openModal('modal-template-3')">
-                See Full Example
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal: Template 1 Full Example -->
-      <div class="modal" id="modal-template-1">
-        <div class="modal-content">
-          <button class="close-btn" onclick="closeModal('modal-template-1')">
-            &times;
-          </button>
-          <h2>Full Example: Clicker Game</h2>
-          <p>Here's a complete, ready-to-paste prompt:</p>
-
-          <div class="modal-code">
-            Create a complete HTML5 game with the following specifications: -
-            The entire game must work in a single .HTML file - Use only vanilla
-            JavaScript (no external libraries except for sounds/images) - Make
-            it fun, playable, and polished from the start - Include a game-over
-            state and a way to restart Theme: A screaming avocado clicker game
-            where you collect guacamole. Core Mechanic: The player clicks on a
-            big avocado to earn guacamole. Each click earns 1 guacamole. Display
-            a guacamole counter at the top of the screen showing the current
-            total. Win Condition: When the player reaches 100 guacamole, show a
-            "YOU WIN! FINAL GUACAMOLE: [amount]" screen. Add a restart button
-            that resets the counter to 0. Upgrades Shop (press U): Show 3
-            purchasable upgrades: - Double Click: Costs 50 guac, doubles points
-            per click - Auto Clicker: Costs 200 guac, gains 1 guac per second
-            automatically - Golden Avocado: Costs 500 guac, triples all currency
-            earned Once bought, upgrades are permanent for that playthrough.
-            Polish: Add particle effects (confetti) when clicking, screen shake
-            (subtle) every time the avocado is clicked, and a satisfying "pop"
-            sound. Make the avocado grow 15% when clicked and return to normal
-            size over 200ms. Make the avocado scream (a funny "ahhh" sound)
-            randomly every 5 seconds.
-          </div>
-
-          <p style="margin-top: 20px">
-            <strong>That's it.</strong> Copy this entire block (including the 4
-            magic lines), paste it into your AI, and hit send. You'll have a
-            complete, playable game in seconds.
-          </p>
-        </div>
-      </div>
-
-      <!-- Modal: Template 2 Full Example -->
-      <div class="modal" id="modal-template-2">
-        <div class="modal-content">
-          <button class="close-btn" onclick="closeModal('modal-template-2')">
-            &times;
-          </button>
-          <h2>Full Example: Memory Game</h2>
-          <p>Here's a complete, ready-to-paste prompt:</p>
-
-          <div class="modal-code">
-            Create a complete HTML5 game with the following specifications: -
-            The entire game must work in a single .HTML file - Use only vanilla
-            JavaScript (no external libraries except for sounds/images) - Make
-            it fun, playable, and polished from the start - Include a game-over
-            state and a way to restart Theme: A memory matching game with cat
-            memes. Core Mechanic: Display a 4x4 grid (16 cards) face-down. When
-            clicked, a card flips to reveal a cat meme image. The player must
-            match identical pairs. If two cards don't match, flip them back
-            over. If they do match, keep them face-up. Win Condition: When all 8
-            pairs are matched, show a "PUZZLE SOLVED! You took [number] tries."
-            screen. Add a restart button. Difficulty: Start easy with the 4x4
-            grid. After solving once, offer a 5x6 grid (harder) on restart.
-            Polish: Add a flip animation (card rotates) when cards turn over, a
-            "ding!" sound for correct matches, and a "buzz" sound for incorrect
-            matches. Make correct matches glow with a gold border. Add a moves
-            counter at the top showing how many flips the player has made.
-          </div>
-
-          <p style="margin-top: 20px">
-            <strong>Copy and paste this entire block.</strong> Customize the
-            "cat memes" theme if you want something different (anime characters,
-            food, celebrities, etc.)
-          </p>
-        </div>
-      </div>
-
-      <!-- Modal: Template 3 Full Example -->
-      <div class="modal" id="modal-template-3">
-        <div class="modal-content">
-          <button class="close-btn" onclick="closeModal('modal-template-3')">
-            &times;
-          </button>
-          <h2>Full Example: Narrative Game</h2>
-          <p>Here's a complete, ready-to-paste prompt:</p>
-
-          <div class="modal-code">
-            Create a complete HTML5 game with the following specifications: -
-            The entire game must work in a single .HTML file - Use only vanilla
-            JavaScript (no external libraries except for sounds/images) - Make
-            it fun, playable, and polished from the start - Include a game-over
-            state and a way to restart Theme: A short sci-fi adventure where
-            you're an astronaut stranded on an alien planet. Core Mechanic:
-            Present scenes with text descriptions. Each scene offers 3 clickable
-            choice buttons. Each choice leads to a new scene with new text and
-            new choices. Structure: Create a branching story with at least 8
-            unique scenes. Each scene should have: - A text description (2-3
-            sentences) of what's happening - 3 clickable choice buttons with
-            clear consequences - At least one choice leads to survival (win),
-            one leads to death (lose), one leads to a neutral outcome Win
-            Conditions: Create 3 possible endings: 1. Good ending: "YOU
-            SURVIVED! The rescue ship arrives and you escape the planet." 2. Bad
-            ending: "GAME OVER. You were consumed by alien creatures." 3.
-            Neutral ending: "STRANDED. You survive but the rescue ship never
-            comes. You're alive, but alone." Show end-game text and a restart
-            button for all endings. Polish: Add a title screen that says "LOST
-            ON KEPLER-442b" before the first scene. Style choice buttons with
-            hover effects (color change, scale up). Add a quiet sci-fi ambient
-            sound in the background. Make choice buttons "pop" with a click
-            sound when pressed. Use different colors for different choice types
-            (green = safe, red = danger, yellow = unknown).
-          </div>
-
-          <p style="margin-top: 20px">
-            <strong>Copy and paste this entire block.</strong> Feel free to
-            change the theme (fantasy quest, escape room, detective mystery,
-            etc.)
-          </p>
+        <div>
+          <img
+            src="images/frogg.jpg"
+            alt=""
+            style="width: 60%; border-radius: 8px; margin-left: 20%"
+          />
         </div>
       </div>
 
@@ -1349,7 +1138,7 @@
 
         <div class="summary-box">
           <p>
-            <strong>✓</strong> The 4 magic lines (set expectations every time)
+            <strong>✓</strong> The 3 magic lines (set expectations every time)
           </p>
           <p><strong>✓</strong> Be ridiculously specific (weird is good)</p>
           <p>
@@ -1359,11 +1148,6 @@
           <p>
             <strong>✓</strong> Be surgical with fixes (iterate, don't rewrite)
           </p>
-          <p><strong>✓</strong> What NOT to ask for (avoid the traps)</p>
-          <p>
-            <strong>✓</strong> How to use starter templates (copy, paste,
-            customize)
-          </p>
         </div>
 
         <p style="margin-top: 30px; font-size: 1.1em">
@@ -1371,14 +1155,12 @@
         </p>
 
         <p style="margin-top: 20px">
-          Go back to Module 2. Pick a game idea. Write a prompt using these
-          principles. Paste it into your AI of choice. Hit send.
+          Pick a game idea. Write a prompt using these principles. Paste it into
+          your AI of choice. Hit send.
         </p>
 
-        <p style="margin-top: 20px">Test it. Refine it. Ship it on itch.io.</p>
-
         <p style="margin-top: 20px; color: #667eea; font-weight: bold">
-          The games you build from here on are real.
+          Test it. Refine it. Ship it!
         </p>
       </div>
 
@@ -1398,7 +1180,7 @@
 
     <script>
       let currentPage = 0;
-      const totalPages = 9;
+      const totalPages = 8;
 
       function updatePage() {
         const pages = document.querySelectorAll(".content");
