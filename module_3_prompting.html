@@ -1,1141 +1,1499 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Module 3 – Pro Prompting Tips</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
-        
-        .content {
-            padding: 40px;
-            min-height: 500px;
-            display: none;
-        }
-        
-        .content.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .content h2 {
-            color: #667eea;
-            font-size: 1.8em;
-            margin-bottom: 25px;
-        }
-        
-        .content h3 {
-            color: #667eea;
-            font-size: 1.3em;
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .content p, .content li {
-            font-size: 1.05em;
-            line-height: 1.8;
-            color: #333;
-            margin-bottom: 15px;
-        }
-        
-        .content ul {
-            margin-left: 25px;
-        }
-        
-        .content li {
-            margin-bottom: 12px;
-        }
-        
-        .core-loop {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-        
-        .loop-item {
-            margin: 12px 0;
-            font-size: 1.05em;
-            color: #333;
-        }
-        
-        .loop-item strong {
-            color: #667eea;
-        }
-        
-        /* MAGIC LINES BOX */
-        .magic-lines {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 20px;
-            border-radius: 6px;
-            margin: 20px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        
-        /* COMPARISON BOXES */
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 25px 0;
-        }
-        
-        .comparison-item {
-            padding: 20px;
-            border-radius: 6px;
-            font-size: 1em;
-            line-height: 1.6;
-        }
-        
-        .weak {
-            background: #ffebee;
-            border-left: 4px solid #f44336;
-        }
-        
-        .weak strong {
-            color: #f44336;
-        }
-        
-        .strong {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-        }
-        
-        .strong strong {
-            color: #4caf50;
-        }
-        
-        /* HIGHLIGHT BOX */
-        .highlight-box {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 25px 0;
-            border-radius: 6px;
-        }
-        
-        .highlight-box strong {
-            color: #667eea;
-        }
-        
-        .highlight-box ul {
-            margin-left: 25px;
-            margin-top: 15px;
-        }
-        
-        /* TEMPLATE BOX */
-        .template-box {
-            background: #f9f9f9;
-            border: 2px solid #667eea;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .template-box h4 {
-            color: #667eea;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-        
-        .template-code {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            line-height: 1.6;
-            margin: 15px 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-x: auto;
-        }
-        
-        .template-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            gap: 10px;
-        }
-        
-        /* ACCORDION */
-        .accordion {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .accordion-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .accordion-item:last-child {
-            border-bottom: none;
-        }
-        
-        .accordion-header {
-            background: #f9f9f9;
-            padding: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #667eea;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.2s;
-        }
-        
-        .accordion-header:hover {
-            background: #f0f4ff;
-        }
-        
-        .accordion-icon {
-            font-size: 1.2em;
-            transition: transform 0.3s;
-        }
-        
-        .accordion-item.active .accordion-icon {
-            transform: rotate(180deg);
-        }
-        
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        
-        .accordion-item.active .accordion-content {
-            max-height: 1000px;
-        }
-        
-        .accordion-content p {
-            padding: 15px 15px;
-            margin-bottom: 0;
-            font-size: 0.95em;
-            line-height: 1.8;
-            color: #333;
-        }
-        
-        .accordion-content p:first-child {
-            padding-top: 15px;
-        }
-        
-        .accordion-content p:last-child {
-            padding-bottom: 15px;
-        }
-        
-        .accordion-content strong {
-            color: #667eea;
-        }
-        
-        /* INFO BUTTON */
-        .info-btn {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background 0.2s;
-            flex-shrink: 0;
-        }
-        
-        .info-btn:hover {
-            background: #764ba2;
-        }
-        
-        .info-button-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .info-button-group p {
-            margin: 0;
-            font-weight: bold;
-        }
-        
-        /* MODAL */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .modal-content h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-        }
-        
-        .modal-content h3 {
-            color: #667eea;
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .modal-content p, .modal-content li {
-            margin-bottom: 15px;
-            line-height: 1.8;
-            font-size: 1em;
-            color: #333;
-        }
-        
-        .modal-content ul {
-            margin-left: 20px;
-        }
-        
-        .modal-code {
-            background: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            line-height: 1.6;
-            margin: 15px 0;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-x: auto;
-        }
-        
-        .close-btn {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            color: #667eea;
-            cursor: pointer;
-            border: none;
-            background: none;
-            padding: 0;
-            margin: -10px 0 0 0;
-        }
-        
-        .close-btn:hover {
-            color: #764ba2;
-        }
-        
-        /* SUMMARY BOX */
-        .summary-box {
-            background: #f0f4ff;
-            border-left: 4px solid #667eea;
-            padding: 25px;
-            border-radius: 6px;
-            margin: 25px 0;
-        }
-        
-        .summary-box p {
-            margin-bottom: 12px;
-        }
-        
-        .summary-box strong {
-            color: #667eea;
-        }
-        
-        /* NAVIGATION */
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            padding: 30px 40px;
-            background: #f9f9f9;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        .nav-buttons button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        
-        .nav-buttons button:hover {
-            background: #764ba2;
-        }
-        
-        .nav-buttons button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        .nav-buttons a.button {
-            background: #667eea;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: background 0.2s;
-            text-decoration: none;
-            text-align: center;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
 
-        .nav-buttons a.button:hover {
-            background: #764ba2;
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.2em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.95;
+      }
+
+      .content {
+        padding: 20px 40px 10px 40px;
+        min-height: 500px;
+        display: none;
+      }
+
+      .content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
         }
-        
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: #e0e0e0;
-            position: relative;
+        to {
+          opacity: 1;
         }
-        
-        .progress-fill {
-            height: 100%;
-            background: #667eea;
-            transition: width 0.3s;
+      }
+
+      .content h2 {
+        color: #667eea;
+        font-size: 1.8em;
+        margin-bottom: 25px;
+      }
+
+      .content h3 {
+        color: #667eea;
+        font-size: 1.3em;
+        margin-top: 30px;
+        margin-bottom: 15px;
+      }
+
+      .content p,
+      .content li {
+        font-size: 1.05em;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 15px;
+      }
+
+      .content ul {
+        margin-left: 25px;
+      }
+
+      .content li {
+        margin-bottom: 12px;
+      }
+
+      .core-loop {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 25px 0;
+        border-radius: 6px;
+      }
+
+      .loop-item {
+        margin: 12px 0;
+        font-size: 1.05em;
+        color: #333;
+      }
+
+      .loop-item strong {
+        color: #667eea;
+      }
+
+      /* MAGIC LINES BOX */
+      .magic-lines {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 20px;
+        border-radius: 6px;
+        margin: 20px 0;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      /* COMPARISON BOXES */
+      .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0;
+      }
+
+      .comparison-item {
+        padding: 20px;
+        border-radius: 6px;
+        font-size: 1em;
+        line-height: 1.6;
+      }
+
+      .weak {
+        background: #ffebee;
+        border-left: 4px solid #f44336;
+      }
+
+      .weak strong {
+        color: #f44336;
+      }
+
+      .strong {
+        background: #e8f5e9;
+        border-left: 4px solid #4caf50;
+      }
+
+      .strong strong {
+        color: #4caf50;
+      }
+
+      /* HIGHLIGHT BOX */
+      .highlight-box {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 25px 0 10px 0;
+        border-radius: 6px;
+      }
+
+      .highlight-box strong {
+        color: #667eea;
+      }
+
+      .highlight-box ul {
+        margin-left: 25px;
+        margin-top: 15px;
+      }
+
+      /* TEMPLATE BOX */
+      .template-box {
+        background: #f9f9f9;
+        border: 2px solid #667eea;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+
+      .template-box h4 {
+        color: #667eea;
+        margin-bottom: 15px;
+        font-size: 1.1em;
+      }
+
+      .template-code {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+        line-height: 1.6;
+        margin: 15px 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-x: auto;
+      }
+
+      .template-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 15px;
+        gap: 10px;
+      }
+
+      /* ACCORDION */
+      .accordion {
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin: 15px 0;
+        overflow: hidden;
+      }
+
+      .accordion-item {
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .accordion-item:last-child {
+        border-bottom: none;
+      }
+
+      .accordion-header {
+        background: #f9f9f9;
+        padding: 15px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #667eea;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.2s;
+      }
+
+      .accordion-header:hover {
+        background: #f0f4ff;
+      }
+
+      .accordion-icon {
+        font-size: 1.2em;
+        transition: transform 0.3s;
+      }
+
+      .accordion-item.active .accordion-icon {
+        transform: rotate(180deg);
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+
+      .accordion-item.active .accordion-content {
+        max-height: 1000px;
+      }
+
+      .accordion-content p {
+        padding: 15px 15px;
+        margin-bottom: 0;
+        font-size: 0.95em;
+        line-height: 1.8;
+        color: #333;
+      }
+
+      .accordion-content p:first-child {
+        padding-top: 15px;
+      }
+
+      .accordion-content p:last-child {
+        padding-bottom: 15px;
+      }
+
+      .accordion-content strong {
+        color: #667eea;
+      }
+
+      /* INFO BUTTON */
+      .info-btn {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .info-btn:hover {
+        background: #764ba2;
+      }
+
+      .info-button-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 15px 0;
+      }
+
+      .info-button-group p {
+        margin: 0;
+        font-weight: bold;
+      }
+
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-content {
+        background-color: white;
+        padding: 40px;
+        border-radius: 12px;
+        max-width: 700px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
         }
-        
-        /* TABS */
-        .tab-buttons {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            border-bottom: 2px solid #e0e0e0;
+        to {
+          transform: translateY(0);
+          opacity: 1;
         }
-        
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 12px 20px;
-            color: #667eea;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1em;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s;
-        }
-        
-        .tab-btn.active {
-            border-bottom-color: #667eea;
-            color: #667eea;
-        }
-        
-        .tab-btn:hover {
-            color: #764ba2;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in;
-        }
+      }
+
+      .modal-content h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .modal-content h3 {
+        color: #667eea;
+        margin-top: 20px;
+        margin-bottom: 15px;
+      }
+
+      .modal-content p,
+      .modal-content li {
+        margin-bottom: 15px;
+        line-height: 1.8;
+        font-size: 1em;
+        color: #333;
+      }
+
+      .modal-content ul {
+        margin-left: 20px;
+      }
+
+      .modal-code {
+        background: #2d2d2d;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85em;
+        line-height: 1.6;
+        margin: 15px 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        overflow-x: auto;
+      }
+
+      .close-btn {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        color: #667eea;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: -10px 0 0 0;
+      }
+
+      .close-btn:hover {
+        color: #764ba2;
+      }
+
+      /* SUMMARY BOX */
+      .summary-box {
+        background: #f0f4ff;
+        border-left: 4px solid #667eea;
+        padding: 25px;
+        border-radius: 6px;
+        margin: 25px 0;
+      }
+
+      .summary-box p {
+        margin-bottom: 12px;
+      }
+
+      .summary-box strong {
+        color: #667eea;
+      }
+
+      /* NAVIGATION */
+      .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        padding: 30px 40px;
+        background: #f9f9f9;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .nav-buttons button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background 0.2s;
+      }
+
+      .nav-buttons button:hover {
+        background: #764ba2;
+      }
+
+      .nav-buttons button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      .nav-buttons a.button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: background 0.2s;
+        text-decoration: none;
+        text-align: center;
+      }
+
+      .nav-buttons a.button:hover {
+        background: #764ba2;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        background: #e0e0e0;
+        position: relative;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: #667eea;
+        transition: width 0.3s;
+      }
+
+      /* TABS */
+      .tab-buttons {
+        display: flex;
+        gap: 10px;
+        margin: 20px 0;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      .tab-btn {
+        background: none;
+        border: none;
+        padding: 12px 20px;
+        color: #667eea;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1em;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+      }
+
+      .tab-btn.active {
+        border-bottom-color: #667eea;
+        color: #667eea;
+      }
+
+      .tab-btn:hover {
+        color: #764ba2;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease-in;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: 11.11%"></div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: 11.11%"></div>
+      </div>
+
+      <div class="header">
+        <h1>Pro Prompting Tips</h1>
+        <p>Get exactly what you want from AI. Every time.</p>
+      </div>
+
+      <!-- PAGE 1: WELCOME & CORE LOOP -->
+      <div class="content active">
+        <h2>Pro Prompting Tips: Get Exactly What You Want</h2>
+        <p>
+          You've learned game design and the build process. Now learn how to ask
+          for what you want.
+        </p>
+
+        <p>
+          The best games aren't built in one request. They're built through
+          <strong>precision iteration</strong>:
+        </p>
+
+        <div class="core-loop">
+          <div class="loop-item">
+            <strong>1. Ask</strong> – Give the AI a clear, specific prompt
+          </div>
+          <div class="loop-item">
+            <strong>2. Receive</strong> – Get your playable game back
+          </div>
+          <div class="loop-item">
+            <strong>3. Test</strong> – Play it, find what's missing
+          </div>
+          <div class="loop-item">
+            <strong>4. Refine</strong> – Tell the AI exactly what to fix
+          </div>
+          <div class="loop-item">
+            <strong>5. Repeat</strong> – Usually 3-5 times per game
+          </div>
         </div>
-        
-        <div class="header">
-            <h1>Pro Prompting Tips</h1>
-            <p>Get exactly what you want from AI. Every time.</p>
+
+        <p>
+          This module teaches you how to ask better. Better prompts = faster
+          results = better games.
+        </p>
+      </div>
+
+      <!-- PAGE 2: THE 4 MAGIC LINES -->
+      <div class="content">
+        <h2>Start Every Prompt With These 4 Lines</h2>
+        <p>
+          Before you ask for anything, set the stage. Every single game prompt
+          should start with these lines:
+        </p>
+
+        <div class="magic-lines">
+          Create a complete HTML5 game with the following specifications: - The
+          entire game must work in a single .HTML file - Use only vanilla
+          JavaScript (no external libraries except for sounds/images) - Make it
+          fun, playable, and polished from the start - Include a game-over state
+          and a way to restart
         </div>
-        
-        <!-- PAGE 1: WELCOME & CORE LOOP -->
-        <div class="content active">
-            <h2>Pro Prompting Tips: Get Exactly What You Want</h2>
-            <p>You've learned game design and the build process. Now learn how to ask for what you want.</p>
-            
-            <p>The best games aren't built in one request. They're built through <strong>precision iteration</strong>:</p>
-            
-            <div class="core-loop">
-                <div class="loop-item"><strong>1. Ask</strong> – Give the AI a clear, specific prompt</div>
-                <div class="loop-item"><strong>2. Receive</strong> – Get your playable game back</div>
-                <div class="loop-item"><strong>3. Test</strong> – Play it, find what's missing</div>
-                <div class="loop-item"><strong>4. Refine</strong> – Tell the AI exactly what to fix</div>
-                <div class="loop-item"><strong>5. Repeat</strong> – Usually 3-5 times per game</div>
+
+        <div class="info-button-group">
+          <p>Why these 4 lines?</p>
+          <button class="info-btn" onclick="openModal('modal-magic-lines')">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Magic Lines -->
+      <div class="modal" id="modal-magic-lines">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-magic-lines')">
+            &times;
+          </button>
+          <h2>Why These 4 Lines?</h2>
+          <ul>
+            <li>
+              <strong>They prevent overthinking</strong> – The AI knows exactly
+              what format you want
+            </li>
+            <li>
+              <strong>They force a complete game</strong> – You get a runnable
+              file, not broken pieces
+            </li>
+            <li>
+              <strong>They set clear expectations</strong> – No external
+              libraries = no dependencies, easy to share
+            </li>
+            <li>
+              <strong>They guarantee shareability</strong> – Single .HTML = can
+              email it, upload it, paste it anywhere
+            </li>
+            <li>
+              <strong>They establish scope</strong> – The AI knows you want
+              something polished and playable NOW, not a framework to build on
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 3: TIP 1 - BE SPECIFIC -->
+      <div class="content">
+        <h2>Tip 1: Be Ridiculously Specific</h2>
+        <p>
+          Vague prompts give vague results. Specific prompts give exactly what
+          you want.
+        </p>
+
+        <div class="comparison">
+          <div class="comparison-item weak">
+            <strong>❌ Weak:</strong><br />
+            "Make a clicker game"
+          </div>
+          <div class="comparison-item strong">
+            <strong>✓ Strong:</strong><br />
+            "Make a clicker game where you click a screaming avocado to collect
+            guacamole. Each click earns 1 guacamole. Show a total guacamole
+            counter at the top. When you reach 100 guacamole, show a 'WIN'
+            screen."
+          </div>
+        </div>
+
+        <p>Notice the difference:</p>
+        <ul>
+          <li>
+            The strong version has a <strong>theme</strong> (avocado +
+            guacamole)
+          </li>
+          <li>It specifies <strong>what happens</strong> (click = +1)</li>
+          <li>
+            It defines <strong>when it ends</strong> (100 guacamole = win)
+          </li>
+        </ul>
+
+        <p>
+          The weirder and more specific, the better. The AI's job is to execute
+          your vision, not guess it.
+        </p>
+
+        <div class="info-button-group">
+          <p>Why does specificity matter?</p>
+          <button class="info-btn" onclick="openModal('modal-specificity')">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Specificity -->
+      <div class="modal" id="modal-specificity">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-specificity')">
+            &times;
+          </button>
+          <h2>Why Specificity Matters</h2>
+          <ul>
+            <li>
+              <strong
+                >Vague requests like "make it fun" mean different things</strong
+              >
+              – to you, to me, to the AI. Specific = no ambiguity
+            </li>
+            <li>
+              <strong>The AI doesn't know your visual style</strong> – Does
+              "game" mean retro pixel art? Neon glow? Minimalist? You have to
+              say
+            </li>
+            <li>
+              <strong>It cuts iteration time in half</strong> – You get closer
+              to what you actually want on the first try
+            </li>
+            <li>
+              <strong>Weird themes are memorable</strong> – "Screaming avocado"
+              is way more interesting than "generic clicker." Your game will
+              stand out
+            </li>
+            <li>
+              <strong>The AI can execute what you describe</strong> – But it
+              can't read your mind. Specificity = execution
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 4: TIP 2 - UPGRADES -->
+      <div class="content">
+        <h2>Tip 2: Add Layers With Upgrades & Progression</h2>
+        <p>
+          A game where you just click is fun for 30 seconds. A game where you
+          click to earn currency, then spend it on upgrades, is fun for 30
+          minutes.
+        </p>
+
+        <p>Add this to any clicker or collection game:</p>
+
+        <h3>Template:</h3>
+        <div class="highlight-box">
+          <p>
+            "Include an upgrades shop that opens when the player presses U. Show
+            3 upgrades: [Upgrade 1], [Upgrade 2], [Upgrade 3]. Each upgrade
+            costs [X currency] and provides [bonus effect]. Once bought,
+            upgrades are permanent."
+          </p>
+        </div>
+
+        <h3>Example:</h3>
+        <div class="highlight-box">
+          <p>
+            "Include an upgrades shop that opens when the player presses U. Show
+            3 upgrades: Double Click (costs 50 guac, doubles points per click),
+            Auto Clicker (costs 200 guac, gains 1 guac per second), and Golden
+            Avocado (costs 500 guac, triples all currency earned). Once bought,
+            upgrades are permanent."
+          </p>
+        </div>
+
+        <p>
+          This simple addition creates a goal loop: click → earn → upgrade →
+          click more → earn faster.
+        </p>
+
+        <div class="info-button-group">
+          <p>Why upgrades?</p>
+          <button class="info-btn" onclick="openModal('modal-upgrades')">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Upgrades -->
+      <div class="modal" id="modal-upgrades">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-upgrades')">
+            &times;
+          </button>
+          <h2>Why Upgrades Work</h2>
+          <ul>
+            <li>
+              <strong>They create a meta-game</strong> – On top of the core
+              game, there's now a goal loop
+            </li>
+            <li>
+              <strong>Players always have something to work toward</strong> –
+              Not just clicking forever; they're saving for upgrades
+            </li>
+            <li>
+              <strong>It disguises grinding as progression</strong> – Clicking
+              500 times feels tedious. Saving for 3 upgrades feels intentional
+            </li>
+            <li>
+              <strong>It extends playtime without complexity</strong> – You
+              didn't make the core mechanic harder; you just added layers
+            </li>
+            <li>
+              <strong>Upgrades feel rewarding</strong> – When a player buys an
+              upgrade, they feel progression. Immediate feedback
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 5: TIP 3 - JUICE -->
+      <div class="content">
+        <h2>Tip 3: Juice It Up (Particles, Sounds, Feedback)</h2>
+        <p>
+          A game that works is fine. A game that <strong>feels</strong> good is
+          unforgettable.
+        </p>
+
+        <p>Add this to any prompt:</p>
+
+        <h3>Template:</h3>
+        <div class="highlight-box">
+          <p>
+            "Add visual juice: particle effects when [action], screen shake when
+            [event], and a satisfying sound effect for [interaction]. Make the
+            [object] grow slightly when clicked and return to normal size."
+          </p>
+        </div>
+
+        <h3>Example:</h3>
+        <div class="highlight-box">
+          <p>
+            "Add visual juice: particle effects (confetti or sparkles) when the
+            avocado is clicked, screen shake (subtle, 100ms) when reaching a
+            milestone (every 10 guacs), and a satisfying 'pop' sound for each
+            click. Make the avocado grow 10% when clicked and return to normal
+            size over 200ms."
+          </p>
+        </div>
+
+        <p>These details cost nothing but transform the experience.</p>
+
+        <div class="info-button-group">
+          <p>Why juice?</p>
+          <button class="info-btn" onclick="openModal('modal-juice')">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Juice -->
+      <div class="modal" id="modal-juice">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-juice')">
+            &times;
+          </button>
+          <h2>Why Juice Matters</h2>
+          <ul>
+            <li>
+              <strong>Games with feedback feel more responsive</strong> – A
+              click with feedback feels instant; a click with no response feels
+              broken
+            </li>
+            <li>
+              <strong
+                >Juice is the difference between prototype and polish</strong
+              >
+              – Same mechanics, different feel
+            </li>
+            <li>
+              <strong>It rewards player actions</strong> – When you click,
+              something happens. Every sense gets feedback
+            </li>
+            <li>
+              <strong>Juice disguises simplicity as depth</strong> – A simple
+              clicker with particles and sounds feels way more complex
+            </li>
+            <li>
+              <strong>It's free</strong> – Particle effects and sounds cost
+              nothing to add and cost a lot to remove
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 6: TIP 4 - SURGICAL FIXES -->
+      <div class="content">
+        <h2>Tip 4: Be Surgical With Fixes</h2>
+        <p>
+          You tested your game. Something's off. Don't ask for a rewrite. Be
+          surgical.
+        </p>
+
+        <div class="comparison">
+          <div class="comparison-item weak">
+            <strong>❌ Instead of:</strong><br />
+            "The game feels wrong, fix it"
+          </div>
+          <div class="comparison-item strong">
+            <strong>✓ Use:</strong><br />
+            "The avocado is too small and hard to click. Make it 50% bigger and
+            make it glow when the player hovers over it."
+          </div>
+        </div>
+
+        <div class="comparison">
+          <div class="comparison-item weak">
+            <strong>❌ Instead of:</strong><br />
+            "Make it harder"
+          </div>
+          <div class="comparison-item strong">
+            <strong>✓ Use:</strong><br />
+            "Spawning new avocados takes 3 seconds. Reduce it to 1.5 seconds.
+            Also, after 30 clicks, increase the spawn rate by 20% every 10
+            clicks."
+          </div>
+        </div>
+
+        <p>Surgical prompts:</p>
+        <ul>
+          <li>Describe the problem in detail</li>
+          <li>Specify exactly what to change</li>
+          <li>Give numbers when possible (sizes, timing, colors)</li>
+        </ul>
+
+        <div class="info-button-group">
+          <p>Why be surgical?</p>
+          <button class="info-btn" onclick="openModal('modal-surgical')">
+            Learn More
+          </button>
+        </div>
+      </div>
+
+      <!-- Modal: Surgical -->
+      <div class="modal" id="modal-surgical">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-surgical')">
+            &times;
+          </button>
+          <h2>Why Surgical Fixes Work</h2>
+          <ul>
+            <li>
+              <strong>Broad requests risk breaking what already works</strong> –
+              "Fix it" might make one thing better and break three things that
+              were fine
+            </li>
+            <li>
+              <strong>Specific fixes keep your game stable</strong> – You're
+              tweaking one aspect, not rewriting
+            </li>
+            <li>
+              <strong>Numbers prevent ambiguity</strong> – The AI knows exactly
+              what you want (50% bigger, not "bigger")
+            </li>
+            <li>
+              <strong>This is how you iterate fast</strong> – Each loop is
+              focused, not exploratory
+            </li>
+            <li>
+              <strong>You keep control</strong> – Every change is intentional.
+              You're not asking the AI to decide what's wrong
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PAGE 7: COMMON PITFALLS -->
+      <div class="content">
+        <h2>Avoid These Beginner Mistakes</h2>
+        <p>
+          Some requests sound good but will waste your time. Learn what to
+          avoid:
+        </p>
+
+        <div class="accordion">
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Don't Ask for 3D Games
+              <span class="accordion-icon">▼</span>
             </div>
-            
-            <p>This module teaches you how to ask better. Better prompts = faster results = better games.</p>
-        </div>
-        
-        <!-- PAGE 2: THE 4 MAGIC LINES -->
-        <div class="content">
-            <h2>Start Every Prompt With These 4 Lines</h2>
-            <p>Before you ask for anything, set the stage. Every single game prompt should start with these lines:</p>
-            
-            <div class="magic-lines">Create a complete HTML5 game with the following specifications:
-- The entire game must work in a single .HTML file
-- Use only vanilla JavaScript (no external libraries except for sounds/images)
-- Make it fun, playable, and polished from the start
-- Include a game-over state and a way to restart</div>
-            
-            <div class="info-button-group">
-                <p>Why these 4 lines?</p>
-                <button class="info-btn" onclick="openModal('modal-magic-lines')">Learn More</button>
+            <div class="accordion-content">
+              <p>
+                <strong>Why it's a trap:</strong> 3D requires way more code,
+                assets, and processing power. Your game will be slow, bloated,
+                and hard to polish.
+              </p>
+              <p>
+                <strong>Stick with 2D</strong> until you've shipped 10 games.
+              </p>
+              <p>
+                <strong>What to ask instead:</strong> "Make a top-down 2D game
+                with a bird's-eye camera view" or "Make a side-scrolling 2D
+                platformer"
+              </p>
             </div>
-        </div>
-        
-        <!-- Modal: Magic Lines -->
-        <div class="modal" id="modal-magic-lines">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-magic-lines')">&times;</button>
-                <h2>Why These 4 Lines?</h2>
-                <ul>
-                    <li><strong>They prevent overthinking</strong> – The AI knows exactly what format you want</li>
-                    <li><strong>They force a complete game</strong> – You get a runnable file, not broken pieces</li>
-                    <li><strong>They set clear expectations</strong> – No external libraries = no dependencies, easy to share</li>
-                    <li><strong>They guarantee shareability</strong> – Single .HTML = can email it, upload it, paste it anywhere</li>
-                    <li><strong>They establish scope</strong> – The AI knows you want something polished and playable NOW, not a framework to build on</li>
-                </ul>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Don't Ask for Multiplayer
+              <span class="accordion-icon">▼</span>
             </div>
-        </div>
-        
-        <!-- PAGE 3: TIP 1 - BE SPECIFIC -->
-        <div class="content">
-            <h2>Tip 1: Be Ridiculously Specific</h2>
-            <p>Vague prompts give vague results. Specific prompts give exactly what you want.</p>
-            
-            <div class="comparison">
-                <div class="comparison-item weak">
-                    <strong>❌ Weak:</strong><br>
-                    "Make a clicker game"
-                </div>
-                <div class="comparison-item strong">
-                    <strong>✓ Strong:</strong><br>
-                    "Make a clicker game where you click a screaming avocado to collect guacamole. Each click earns 1 guacamole. Show a total guacamole counter at the top. When you reach 100 guacamole, show a 'WIN' screen."
-                </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Why it's a trap:</strong> Multiplayer requires servers,
+                networking, matchmaking. It's 10x more complex than
+                single-player. You can't test it easily locally.
+              </p>
+              <p>
+                <strong>Keep it single-player</strong> for your first 20 games.
+              </p>
+              <p>
+                <strong>What to ask instead:</strong> "Make this a single-player
+                game with leaderboard tracking (local storage only)" or "Add a
+                two-player mode that plays on the same keyboard locally"
+              </p>
             </div>
-            
-            <p>Notice the difference:</p>
-            <ul>
-                <li>The strong version has a <strong>theme</strong> (avocado + guacamole)</li>
-                <li>It specifies <strong>what happens</strong> (click = +1)</li>
-                <li>It defines <strong>when it ends</strong> (100 guacamole = win)</li>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Don't Ask for Scope Creep
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Why it's a trap:</strong> Asking for everything at once
+                gives you nothing. A broken mess, not a game.
+              </p>
+              <p>
+                <strong>Example of scope creep:</strong> "Make a full RPG with
+                story, inventory, crafting, NPCs, and combat" — This won't work
+                in one prompt.
+              </p>
+              <p>
+                <strong>What to ask instead:</strong> Start with one core
+                mechanic: "Make a text-based dungeon crawler where I choose
+                left/right at each turn and fight one type of enemy" — then
+                iterate and expand from there.
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Don't Ask for External APIs
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Why it's a trap:</strong> Your single .HTML file can't
+                reliably pull data from the internet. APIs require
+                authentication, handling errors, CORS, and backend setup.
+              </p>
+              <p>
+                <strong>Keep it local.</strong> A single .HTML file can't do
+                backend stuff.
+              </p>
+              <p>
+                <strong>What to ask instead:</strong> "Use in-game data only" or
+                "Generate random data locally" or "Let the player input their
+                own data"
+              </p>
+            </div>
+          </div>
+
+          <div class="accordion-item" onclick="toggleAccordion(this)">
+            <div class="accordion-header">
+              Don't Assume the AI Knows Your Vision
+              <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong>Why it's a trap:</strong> You're imagining a specific
+                game in your head. The AI probably doesn't know that exact game.
+              </p>
+              <p>
+                <strong>Example:</strong> "Make it look like [game you're
+                thinking of]" — The AI might not know that game, or might
+                interpret it differently.
+              </p>
+              <p>
+                <strong>What to ask instead:</strong> Describe it: "Make it look
+                retro and pixelated, like 8-bit NES games. Use a 4-color
+                palette: black, white, red, yellow."
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 8: STARTER TEMPLATES -->
+      <div class="content">
+        <h2>Copy. Paste. Build.</h2>
+        <p>
+          Here are 3 complete starter templates. Copy the 4 magic lines first,
+          then paste the template below. Customize the bracketed sections and
+          hit send.
+        </p>
+
+        <div class="tab-buttons">
+          <button
+            class="tab-btn active"
+            onclick="switchTab(event, 'tab-template-1')"
+          >
+            Action/Clicker
+          </button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-template-2')">
+            Puzzle/Memory
+          </button>
+          <button class="tab-btn" onclick="switchTab(event, 'tab-template-3')">
+            Narrative/Choice
+          </button>
+        </div>
+
+        <!-- Template 1 -->
+        <div id="tab-template-1" class="tab-content active">
+          <div class="template-box">
+            <h4>Theme:</h4>
+            <p>[Your theme: e.g., "clicking mushrooms to earn spore points"]</p>
+
+            <h4 style="margin-top: 20px">Core Mechanic:</h4>
+            <p>
+              The player clicks a [clickable object] to earn [currency]. Each
+              click earns [amount]. Display a [currency name] counter at the
+              top.
+            </p>
+
+            <h4>Win Condition:</h4>
+            <p>
+              When the player reaches [number], show a "YOU WIN!" screen with
+              final [currency] amount. Add a restart button.
+            </p>
+
+            <h4>Upgrades Shop (press U):</h4>
+            <p>Show 3 purchasable upgrades:</p>
+            <ul style="margin-left: 25px; margin-top: 10px">
+              <li>[Upgrade 1]: Costs [X currency], [bonus effect]</li>
+              <li>[Upgrade 2]: Costs [X currency], [bonus effect]</li>
+              <li>[Upgrade 3]: Costs [X currency], [bonus effect]</li>
             </ul>
-            
-            <p>The weirder and more specific, the better. The AI's job is to execute your vision, not guess it.</p>
-            
-            <div class="info-button-group">
-                <p>Why does specificity matter?</p>
-                <button class="info-btn" onclick="openModal('modal-specificity')">Learn More</button>
+
+            <h4>Polish:</h4>
+            <p>
+              Add particle effects when clicking, screen shake on milestones,
+              and a satisfying click sound. Make the clickable object slightly
+              scale up on click and return to normal.
+            </p>
+
+            <div class="template-controls">
+              <button class="info-btn" onclick="openModal('modal-template-1')">
+                See Full Example
+              </button>
             </div>
+          </div>
         </div>
-        
-        <!-- Modal: Specificity -->
-        <div class="modal" id="modal-specificity">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-specificity')">&times;</button>
-                <h2>Why Specificity Matters</h2>
-                <ul>
-                    <li><strong>Vague requests like "make it fun" mean different things</strong> – to you, to me, to the AI. Specific = no ambiguity</li>
-                    <li><strong>The AI doesn't know your visual style</strong> – Does "game" mean retro pixel art? Neon glow? Minimalist? You have to say</li>
-                    <li><strong>It cuts iteration time in half</strong> – You get closer to what you actually want on the first try</li>
-                    <li><strong>Weird themes are memorable</strong> – "Screaming avocado" is way more interesting than "generic clicker." Your game will stand out</li>
-                    <li><strong>The AI can execute what you describe</strong> – But it can't read your mind. Specificity = execution</li>
-                </ul>
+
+        <!-- Template 2 -->
+        <div id="tab-template-2" class="tab-content">
+          <div class="template-box">
+            <h4>Theme:</h4>
+            <p>[Your theme: e.g., "matching cat memes"]</p>
+
+            <h4 style="margin-top: 20px">Core Mechanic:</h4>
+            <p>
+              Display a grid of [X] cards face-down. When clicked, a card flips
+              to reveal a [type of item: images, words, etc.]. The player must
+              match [matching rule: identical pairs, related pairs, etc.].
+            </p>
+
+            <h4>Win Condition:</h4>
+            <p>
+              When all pairs are matched, show a "PUZZLE SOLVED!" screen with
+              the number of tries it took. Add a restart button.
+            </p>
+
+            <h4>Difficulty:</h4>
+            <p>[Optional progression: harder grids, timer, limited moves]</p>
+
+            <h4>Polish:</h4>
+            <p>
+              Add a flip animation when cards turn over, a satisfying sound for
+              correct matches, and a buzzer sound for incorrect matches. Make
+              correct matches glow or stay highlighted.
+            </p>
+
+            <div class="template-controls">
+              <button class="info-btn" onclick="openModal('modal-template-2')">
+                See Full Example
+              </button>
             </div>
+          </div>
         </div>
-        
-        <!-- PAGE 4: TIP 2 - UPGRADES -->
-        <div class="content">
-            <h2>Tip 2: Add Layers With Upgrades & Progression</h2>
-            <p>A game where you just click is fun for 30 seconds. A game where you click to earn currency, then spend it on upgrades, is fun for 30 minutes.</p>
-            
-            <p>Add this to any clicker or collection game:</p>
-            
-            <h3>Template:</h3>
-            <div class="highlight-box">
-                <p>"Include an upgrades shop that opens when the player presses U. Show 3 upgrades: [Upgrade 1], [Upgrade 2], [Upgrade 3]. Each upgrade costs [X currency] and provides [bonus effect]. Once bought, upgrades are permanent."</p>
-            </div>
-            
-            <h3>Example:</h3>
-            <div class="highlight-box">
-                <p>"Include an upgrades shop that opens when the player presses U. Show 3 upgrades: Double Click (costs 50 guac, doubles points per click), Auto Clicker (costs 200 guac, gains 1 guac per second), and Golden Avocado (costs 500 guac, triples all currency earned). Once bought, upgrades are permanent."</p>
-            </div>
-            
-            <p>This simple addition creates a goal loop: click → earn → upgrade → click more → earn faster.</p>
-            
-            <div class="info-button-group">
-                <p>Why upgrades?</p>
-                <button class="info-btn" onclick="openModal('modal-upgrades')">Learn More</button>
-            </div>
-        </div>
-        
-        <!-- Modal: Upgrades -->
-        <div class="modal" id="modal-upgrades">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-upgrades')">&times;</button>
-                <h2>Why Upgrades Work</h2>
-                <ul>
-                    <li><strong>They create a meta-game</strong> – On top of the core game, there's now a goal loop</li>
-                    <li><strong>Players always have something to work toward</strong> – Not just clicking forever; they're saving for upgrades</li>
-                    <li><strong>It disguises grinding as progression</strong> – Clicking 500 times feels tedious. Saving for 3 upgrades feels intentional</li>
-                    <li><strong>It extends playtime without complexity</strong> – You didn't make the core mechanic harder; you just added layers</li>
-                    <li><strong>Upgrades feel rewarding</strong> – When a player buys an upgrade, they feel progression. Immediate feedback</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- PAGE 5: TIP 3 - JUICE -->
-        <div class="content">
-            <h2>Tip 3: Juice It Up (Particles, Sounds, Feedback)</h2>
-            <p>A game that works is fine. A game that <strong>feels</strong> good is unforgettable.</p>
-            
-            <p>Add this to any prompt:</p>
-            
-            <h3>Template:</h3>
-            <div class="highlight-box">
-                <p>"Add visual juice: particle effects when [action], screen shake when [event], and a satisfying sound effect for [interaction]. Make the [object] grow slightly when clicked and return to normal size."</p>
-            </div>
-            
-            <h3>Example:</h3>
-            <div class="highlight-box">
-                <p>"Add visual juice: particle effects (confetti or sparkles) when the avocado is clicked, screen shake (subtle, 100ms) when reaching a milestone (every 10 guacs), and a satisfying 'pop' sound for each click. Make the avocado grow 10% when clicked and return to normal size over 200ms."</p>
-            </div>
-            
-            <p>These details cost nothing but transform the experience.</p>
-            
-            <div class="info-button-group">
-                <p>Why juice?</p>
-                <button class="info-btn" onclick="openModal('modal-juice')">Learn More</button>
-            </div>
-        </div>
-        
-        <!-- Modal: Juice -->
-        <div class="modal" id="modal-juice">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-juice')">&times;</button>
-                <h2>Why Juice Matters</h2>
-                <ul>
-                    <li><strong>Games with feedback feel more responsive</strong> – A click with feedback feels instant; a click with no response feels broken</li>
-                    <li><strong>Juice is the difference between prototype and polish</strong> – Same mechanics, different feel</li>
-                    <li><strong>It rewards player actions</strong> – When you click, something happens. Every sense gets feedback</li>
-                    <li><strong>Juice disguises simplicity as depth</strong> – A simple clicker with particles and sounds feels way more complex</li>
-                    <li><strong>It's free</strong> – Particle effects and sounds cost nothing to add and cost a lot to remove</li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- PAGE 6: TIP 4 - SURGICAL FIXES -->
-        <div class="content">
-            <h2>Tip 4: Be Surgical With Fixes</h2>
-            <p>You tested your game. Something's off. Don't ask for a rewrite. Be surgical.</p>
-            
-            <div class="comparison">
-                <div class="comparison-item weak">
-                    <strong>❌ Instead of:</strong><br>
-                    "The game feels wrong, fix it"
-                </div>
-                <div class="comparison-item strong">
-                    <strong>✓ Use:</strong><br>
-                    "The avocado is too small and hard to click. Make it 50% bigger and make it glow when the player hovers over it."
-                </div>
-            </div>
-            
-            <div class="comparison">
-                <div class="comparison-item weak">
-                    <strong>❌ Instead of:</strong><br>
-                    "Make it harder"
-                </div>
-                <div class="comparison-item strong">
-                    <strong>✓ Use:</strong><br>
-                    "Spawning new avocados takes 3 seconds. Reduce it to 1.5 seconds. Also, after 30 clicks, increase the spawn rate by 20% every 10 clicks."
-                </div>
-            </div>
-            
-            <p>Surgical prompts:</p>
-            <ul>
-                <li>Describe the problem in detail</li>
-                <li>Specify exactly what to change</li>
-                <li>Give numbers when possible (sizes, timing, colors)</li>
+
+        <!-- Template 3 -->
+        <div id="tab-template-3" class="tab-content">
+          <div class="template-box">
+            <h4>Theme:</h4>
+            <p>[Your theme: e.g., "a short sci-fi adventure"]</p>
+
+            <h4 style="margin-top: 20px">Core Mechanic:</h4>
+            <p>
+              Present a scene with text description. Offer [number] choices
+              (buttons). Each choice leads to a new scene with different text
+              and new choices.
+            </p>
+
+            <h4>Structure:</h4>
+            <p>
+              Create a branching story with at least [number] unique scenes.
+              Each scene should have:
+            </p>
+            <ul style="margin-left: 25px; margin-top: 10px">
+              <li>A text description of what's happening</li>
+              <li>[Number] clickable choice buttons</li>
+              <li>
+                One choice leads to a win/ending, others to different outcomes
+              </li>
             </ul>
-            
-            <div class="info-button-group">
-                <p>Why be surgical?</p>
-                <button class="info-btn" onclick="openModal('modal-surgical')">Learn More</button>
+
+            <h4>Win Conditions:</h4>
+            <p>
+              Create [number] possible endings. At least one should be a "good"
+              ending and one should be a "bad" ending. Show end-game text and a
+              restart button.
+            </p>
+
+            <h4>Polish:</h4>
+            <p>
+              Add a title screen before the story begins. Use different colors
+              or fonts to distinguish choice buttons. Add background music or
+              ambient sounds. Make choices feel responsive with hover effects
+              and click sounds.
+            </p>
+
+            <div class="template-controls">
+              <button class="info-btn" onclick="openModal('modal-template-3')">
+                See Full Example
+              </button>
             </div>
+          </div>
         </div>
-        
-        <!-- Modal: Surgical -->
-        <div class="modal" id="modal-surgical">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-surgical')">&times;</button>
-                <h2>Why Surgical Fixes Work</h2>
-                <ul>
-                    <li><strong>Broad requests risk breaking what already works</strong> – "Fix it" might make one thing better and break three things that were fine</li>
-                    <li><strong>Specific fixes keep your game stable</strong> – You're tweaking one aspect, not rewriting</li>
-                    <li><strong>Numbers prevent ambiguity</strong> – The AI knows exactly what you want (50% bigger, not "bigger")</li>
-                    <li><strong>This is how you iterate fast</strong> – Each loop is focused, not exploratory</li>
-                    <li><strong>You keep control</strong> – Every change is intentional. You're not asking the AI to decide what's wrong</li>
-                </ul>
-            </div>
+      </div>
+
+      <!-- Modal: Template 1 Full Example -->
+      <div class="modal" id="modal-template-1">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-template-1')">
+            &times;
+          </button>
+          <h2>Full Example: Clicker Game</h2>
+          <p>Here's a complete, ready-to-paste prompt:</p>
+
+          <div class="modal-code">
+            Create a complete HTML5 game with the following specifications: -
+            The entire game must work in a single .HTML file - Use only vanilla
+            JavaScript (no external libraries except for sounds/images) - Make
+            it fun, playable, and polished from the start - Include a game-over
+            state and a way to restart Theme: A screaming avocado clicker game
+            where you collect guacamole. Core Mechanic: The player clicks on a
+            big avocado to earn guacamole. Each click earns 1 guacamole. Display
+            a guacamole counter at the top of the screen showing the current
+            total. Win Condition: When the player reaches 100 guacamole, show a
+            "YOU WIN! FINAL GUACAMOLE: [amount]" screen. Add a restart button
+            that resets the counter to 0. Upgrades Shop (press U): Show 3
+            purchasable upgrades: - Double Click: Costs 50 guac, doubles points
+            per click - Auto Clicker: Costs 200 guac, gains 1 guac per second
+            automatically - Golden Avocado: Costs 500 guac, triples all currency
+            earned Once bought, upgrades are permanent for that playthrough.
+            Polish: Add particle effects (confetti) when clicking, screen shake
+            (subtle) every time the avocado is clicked, and a satisfying "pop"
+            sound. Make the avocado grow 15% when clicked and return to normal
+            size over 200ms. Make the avocado scream (a funny "ahhh" sound)
+            randomly every 5 seconds.
+          </div>
+
+          <p style="margin-top: 20px">
+            <strong>That's it.</strong> Copy this entire block (including the 4
+            magic lines), paste it into your AI, and hit send. You'll have a
+            complete, playable game in seconds.
+          </p>
         </div>
-        
-        <!-- PAGE 7: COMMON PITFALLS -->
-        <div class="content">
-            <h2>Avoid These Beginner Mistakes</h2>
-            <p>Some requests sound good but will waste your time. Learn what to avoid:</p>
-            
-            <div class="accordion">
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Don't Ask for 3D Games
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Why it's a trap:</strong> 3D requires way more code, assets, and processing power. Your game will be slow, bloated, and hard to polish.</p>
-                        <p><strong>Stick with 2D</strong> until you've shipped 10 games.</p>
-                        <p><strong>What to ask instead:</strong> "Make a top-down 2D game with a bird's-eye camera view" or "Make a side-scrolling 2D platformer"</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Don't Ask for Multiplayer
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Why it's a trap:</strong> Multiplayer requires servers, networking, matchmaking. It's 10x more complex than single-player. You can't test it easily locally.</p>
-                        <p><strong>Keep it single-player</strong> for your first 20 games.</p>
-                        <p><strong>What to ask instead:</strong> "Make this a single-player game with leaderboard tracking (local storage only)" or "Add a two-player mode that plays on the same keyboard locally"</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Don't Ask for Scope Creep
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Why it's a trap:</strong> Asking for everything at once gives you nothing. A broken mess, not a game.</p>
-                        <p><strong>Example of scope creep:</strong> "Make a full RPG with story, inventory, crafting, NPCs, and combat" — This won't work in one prompt.</p>
-                        <p><strong>What to ask instead:</strong> Start with one core mechanic: "Make a text-based dungeon crawler where I choose left/right at each turn and fight one type of enemy" — then iterate and expand from there.</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Don't Ask for External APIs
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Why it's a trap:</strong> Your single .HTML file can't reliably pull data from the internet. APIs require authentication, handling errors, CORS, and backend setup.</p>
-                        <p><strong>Keep it local.</strong> A single .HTML file can't do backend stuff.</p>
-                        <p><strong>What to ask instead:</strong> "Use in-game data only" or "Generate random data locally" or "Let the player input their own data"</p>
-                    </div>
-                </div>
-                
-                <div class="accordion-item" onclick="toggleAccordion(this)">
-                    <div class="accordion-header">
-                        Don't Assume the AI Knows Your Vision
-                        <span class="accordion-icon">▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <p><strong>Why it's a trap:</strong> You're imagining a specific game in your head. The AI probably doesn't know that exact game.</p>
-                        <p><strong>Example:</strong> "Make it look like [game you're thinking of]" — The AI might not know that game, or might interpret it differently.</p>
-                        <p><strong>What to ask instead:</strong> Describe it: "Make it look retro and pixelated, like 8-bit NES games. Use a 4-color palette: black, white, red, yellow."</p>
-                    </div>
-                </div>
-            </div>
+      </div>
+
+      <!-- Modal: Template 2 Full Example -->
+      <div class="modal" id="modal-template-2">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-template-2')">
+            &times;
+          </button>
+          <h2>Full Example: Memory Game</h2>
+          <p>Here's a complete, ready-to-paste prompt:</p>
+
+          <div class="modal-code">
+            Create a complete HTML5 game with the following specifications: -
+            The entire game must work in a single .HTML file - Use only vanilla
+            JavaScript (no external libraries except for sounds/images) - Make
+            it fun, playable, and polished from the start - Include a game-over
+            state and a way to restart Theme: A memory matching game with cat
+            memes. Core Mechanic: Display a 4x4 grid (16 cards) face-down. When
+            clicked, a card flips to reveal a cat meme image. The player must
+            match identical pairs. If two cards don't match, flip them back
+            over. If they do match, keep them face-up. Win Condition: When all 8
+            pairs are matched, show a "PUZZLE SOLVED! You took [number] tries."
+            screen. Add a restart button. Difficulty: Start easy with the 4x4
+            grid. After solving once, offer a 5x6 grid (harder) on restart.
+            Polish: Add a flip animation (card rotates) when cards turn over, a
+            "ding!" sound for correct matches, and a "buzz" sound for incorrect
+            matches. Make correct matches glow with a gold border. Add a moves
+            counter at the top showing how many flips the player has made.
+          </div>
+
+          <p style="margin-top: 20px">
+            <strong>Copy and paste this entire block.</strong> Customize the
+            "cat memes" theme if you want something different (anime characters,
+            food, celebrities, etc.)
+          </p>
         </div>
-        
-        <!-- PAGE 8: STARTER TEMPLATES -->
-        <div class="content">
-            <h2>Copy. Paste. Build.</h2>
-            <p>Here are 3 complete starter templates. Copy the 4 magic lines first, then paste the template below. Customize the bracketed sections and hit send.</p>
-            
-            <div class="tab-buttons">
-                <button class="tab-btn active" onclick="switchTab(event, 'tab-template-1')">Action/Clicker</button>
-                <button class="tab-btn" onclick="switchTab(event, 'tab-template-2')">Puzzle/Memory</button>
-                <button class="tab-btn" onclick="switchTab(event, 'tab-template-3')">Narrative/Choice</button>
-            </div>
-            
-            <!-- Template 1 -->
-            <div id="tab-template-1" class="tab-content active">
-                <div class="template-box">
-                    <h4>Theme:</h4>
-                    <p>[Your theme: e.g., "clicking mushrooms to earn spore points"]</p>
-                    
-                    <h4 style="margin-top: 20px;">Core Mechanic:</h4>
-                    <p>The player clicks a [clickable object] to earn [currency]. Each click earns [amount]. Display a [currency name] counter at the top.</p>
-                    
-                    <h4>Win Condition:</h4>
-                    <p>When the player reaches [number], show a "YOU WIN!" screen with final [currency] amount. Add a restart button.</p>
-                    
-                    <h4>Upgrades Shop (press U):</h4>
-                    <p>Show 3 purchasable upgrades:</p>
-                    <ul style="margin-left: 25px; margin-top: 10px;">
-                        <li>[Upgrade 1]: Costs [X currency], [bonus effect]</li>
-                        <li>[Upgrade 2]: Costs [X currency], [bonus effect]</li>
-                        <li>[Upgrade 3]: Costs [X currency], [bonus effect]</li>
-                    </ul>
-                    
-                    <h4>Polish:</h4>
-                    <p>Add particle effects when clicking, screen shake on milestones, and a satisfying click sound. Make the clickable object slightly scale up on click and return to normal.</p>
-                    
-                    <div class="template-controls">
-                        <button class="info-btn" onclick="openModal('modal-template-1')">See Full Example</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Template 2 -->
-            <div id="tab-template-2" class="tab-content">
-                <div class="template-box">
-                    <h4>Theme:</h4>
-                    <p>[Your theme: e.g., "matching cat memes"]</p>
-                    
-                    <h4 style="margin-top: 20px;">Core Mechanic:</h4>
-                    <p>Display a grid of [X] cards face-down. When clicked, a card flips to reveal a [type of item: images, words, etc.]. The player must match [matching rule: identical pairs, related pairs, etc.].</p>
-                    
-                    <h4>Win Condition:</h4>
-                    <p>When all pairs are matched, show a "PUZZLE SOLVED!" screen with the number of tries it took. Add a restart button.</p>
-                    
-                    <h4>Difficulty:</h4>
-                    <p>[Optional progression: harder grids, timer, limited moves]</p>
-                    
-                    <h4>Polish:</h4>
-                    <p>Add a flip animation when cards turn over, a satisfying sound for correct matches, and a buzzer sound for incorrect matches. Make correct matches glow or stay highlighted.</p>
-                    
-                    <div class="template-controls">
-                        <button class="info-btn" onclick="openModal('modal-template-2')">See Full Example</button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Template 3 -->
-            <div id="tab-template-3" class="tab-content">
-                <div class="template-box">
-                    <h4>Theme:</h4>
-                    <p>[Your theme: e.g., "a short sci-fi adventure"]</p>
-                    
-                    <h4 style="margin-top: 20px;">Core Mechanic:</h4>
-                    <p>Present a scene with text description. Offer [number] choices (buttons). Each choice leads to a new scene with different text and new choices.</p>
-                    
-                    <h4>Structure:</h4>
-                    <p>Create a branching story with at least [number] unique scenes. Each scene should have:</p>
-                    <ul style="margin-left: 25px; margin-top: 10px;">
-                        <li>A text description of what's happening</li>
-                        <li>[Number] clickable choice buttons</li>
-                        <li>One choice leads to a win/ending, others to different outcomes</li>
-                    </ul>
-                    
-                    <h4>Win Conditions:</h4>
-                    <p>Create [number] possible endings. At least one should be a "good" ending and one should be a "bad" ending. Show end-game text and a restart button.</p>
-                    
-                    <h4>Polish:</h4>
-                    <p>Add a title screen before the story begins. Use different colors or fonts to distinguish choice buttons. Add background music or ambient sounds. Make choices feel responsive with hover effects and click sounds.</p>
-                    
-                    <div class="template-controls">
-                        <button class="info-btn" onclick="openModal('modal-template-3')">See Full Example</button>
-                    </div>
-                </div>
-            </div>
+      </div>
+
+      <!-- Modal: Template 3 Full Example -->
+      <div class="modal" id="modal-template-3">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closeModal('modal-template-3')">
+            &times;
+          </button>
+          <h2>Full Example: Narrative Game</h2>
+          <p>Here's a complete, ready-to-paste prompt:</p>
+
+          <div class="modal-code">
+            Create a complete HTML5 game with the following specifications: -
+            The entire game must work in a single .HTML file - Use only vanilla
+            JavaScript (no external libraries except for sounds/images) - Make
+            it fun, playable, and polished from the start - Include a game-over
+            state and a way to restart Theme: A short sci-fi adventure where
+            you're an astronaut stranded on an alien planet. Core Mechanic:
+            Present scenes with text descriptions. Each scene offers 3 clickable
+            choice buttons. Each choice leads to a new scene with new text and
+            new choices. Structure: Create a branching story with at least 8
+            unique scenes. Each scene should have: - A text description (2-3
+            sentences) of what's happening - 3 clickable choice buttons with
+            clear consequences - At least one choice leads to survival (win),
+            one leads to death (lose), one leads to a neutral outcome Win
+            Conditions: Create 3 possible endings: 1. Good ending: "YOU
+            SURVIVED! The rescue ship arrives and you escape the planet." 2. Bad
+            ending: "GAME OVER. You were consumed by alien creatures." 3.
+            Neutral ending: "STRANDED. You survive but the rescue ship never
+            comes. You're alive, but alone." Show end-game text and a restart
+            button for all endings. Polish: Add a title screen that says "LOST
+            ON KEPLER-442b" before the first scene. Style choice buttons with
+            hover effects (color change, scale up). Add a quiet sci-fi ambient
+            sound in the background. Make choice buttons "pop" with a click
+            sound when pressed. Use different colors for different choice types
+            (green = safe, red = danger, yellow = unknown).
+          </div>
+
+          <p style="margin-top: 20px">
+            <strong>Copy and paste this entire block.</strong> Feel free to
+            change the theme (fantasy quest, escape room, detective mystery,
+            etc.)
+          </p>
         </div>
-        
-        <!-- Modal: Template 1 Full Example -->
-        <div class="modal" id="modal-template-1">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-template-1')">&times;</button>
-                <h2>Full Example: Clicker Game</h2>
-                <p>Here's a complete, ready-to-paste prompt:</p>
-                
-                <div class="modal-code">Create a complete HTML5 game with the following specifications:
-- The entire game must work in a single .HTML file
-- Use only vanilla JavaScript (no external libraries except for sounds/images)
-- Make it fun, playable, and polished from the start
-- Include a game-over state and a way to restart
+      </div>
 
-Theme: A screaming avocado clicker game where you collect guacamole.
+      <!-- PAGE 9: YOU'RE DONE -->
+      <div class="content">
+        <h2>You Now Know Everything You Need</h2>
 
-Core Mechanic: The player clicks on a big avocado to earn guacamole. Each click earns 1 guacamole. Display a guacamole counter at the top of the screen showing the current total.
-
-Win Condition: When the player reaches 100 guacamole, show a "YOU WIN! FINAL GUACAMOLE: [amount]" screen. Add a restart button that resets the counter to 0.
-
-Upgrades Shop (press U): Show 3 purchasable upgrades:
-- Double Click: Costs 50 guac, doubles points per click
-- Auto Clicker: Costs 200 guac, gains 1 guac per second automatically
-- Golden Avocado: Costs 500 guac, triples all currency earned
-
-Once bought, upgrades are permanent for that playthrough.
-
-Polish: Add particle effects (confetti) when clicking, screen shake (subtle) every time the avocado is clicked, and a satisfying "pop" sound. Make the avocado grow 15% when clicked and return to normal size over 200ms. Make the avocado scream (a funny "ahhh" sound) randomly every 5 seconds.</div>
-                
-                <p style="margin-top: 20px;"><strong>That's it.</strong> Copy this entire block (including the 4 magic lines), paste it into your AI, and hit send. You'll have a complete, playable game in seconds.</p>
-            </div>
+        <div class="summary-box">
+          <p>
+            <strong>✓</strong> The 4 magic lines (set expectations every time)
+          </p>
+          <p><strong>✓</strong> Be ridiculously specific (weird is good)</p>
+          <p>
+            <strong>✓</strong> Add upgrades and progression (make it addictive)
+          </p>
+          <p><strong>✓</strong> Juice it up (make it feel alive)</p>
+          <p>
+            <strong>✓</strong> Be surgical with fixes (iterate, don't rewrite)
+          </p>
+          <p><strong>✓</strong> What NOT to ask for (avoid the traps)</p>
+          <p>
+            <strong>✓</strong> How to use starter templates (copy, paste,
+            customize)
+          </p>
         </div>
-        
-        <!-- Modal: Template 2 Full Example -->
-        <div class="modal" id="modal-template-2">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-template-2')">&times;</button>
-                <h2>Full Example: Memory Game</h2>
-                <p>Here's a complete, ready-to-paste prompt:</p>
-                
-                <div class="modal-code">Create a complete HTML5 game with the following specifications:
-- The entire game must work in a single .HTML file
-- Use only vanilla JavaScript (no external libraries except for sounds/images)
-- Make it fun, playable, and polished from the start
-- Include a game-over state and a way to restart
 
-Theme: A memory matching game with cat memes.
+        <p style="margin-top: 30px; font-size: 1.1em">
+          <strong>You're equipped to build unlimited games.</strong>
+        </p>
 
-Core Mechanic: Display a 4x4 grid (16 cards) face-down. When clicked, a card flips to reveal a cat meme image. The player must match identical pairs. If two cards don't match, flip them back over. If they do match, keep them face-up.
+        <p style="margin-top: 20px">
+          Go back to Module 2. Pick a game idea. Write a prompt using these
+          principles. Paste it into your AI of choice. Hit send.
+        </p>
 
-Win Condition: When all 8 pairs are matched, show a "PUZZLE SOLVED! You took [number] tries." screen. Add a restart button.
+        <p style="margin-top: 20px">Test it. Refine it. Ship it on itch.io.</p>
 
-Difficulty: Start easy with the 4x4 grid. After solving once, offer a 5x6 grid (harder) on restart.
+        <p style="margin-top: 20px; color: #667eea; font-weight: bold">
+          The games you build from here on are real.
+        </p>
+      </div>
 
-Polish: Add a flip animation (card rotates) when cards turn over, a "ding!" sound for correct matches, and a "buzz" sound for incorrect matches. Make correct matches glow with a gold border. Add a moves counter at the top showing how many flips the player has made.</div>
-                
-                <p style="margin-top: 20px;"><strong>Copy and paste this entire block.</strong> Customize the "cat memes" theme if you want something different (anime characters, food, celebrities, etc.)</p>
-            </div>
-        </div>
-        
-        <!-- Modal: Template 3 Full Example -->
-        <div class="modal" id="modal-template-3">
-            <div class="modal-content">
-                <button class="close-btn" onclick="closeModal('modal-template-3')">&times;</button>
-                <h2>Full Example: Narrative Game</h2>
-                <p>Here's a complete, ready-to-paste prompt:</p>
-                
-                <div class="modal-code">Create a complete HTML5 game with the following specifications:
-- The entire game must work in a single .HTML file
-- Use only vanilla JavaScript (no external libraries except for sounds/images)
-- Make it fun, playable, and polished from the start
-- Include a game-over state and a way to restart
-
-Theme: A short sci-fi adventure where you're an astronaut stranded on an alien planet.
-
-Core Mechanic: Present scenes with text descriptions. Each scene offers 3 clickable choice buttons. Each choice leads to a new scene with new text and new choices.
-
-Structure: Create a branching story with at least 8 unique scenes. Each scene should have:
-- A text description (2-3 sentences) of what's happening
-- 3 clickable choice buttons with clear consequences
-- At least one choice leads to survival (win), one leads to death (lose), one leads to a neutral outcome
-
-Win Conditions: Create 3 possible endings:
-1. Good ending: "YOU SURVIVED! The rescue ship arrives and you escape the planet."
-2. Bad ending: "GAME OVER. You were consumed by alien creatures."
-3. Neutral ending: "STRANDED. You survive but the rescue ship never comes. You're alive, but alone."
-
-Show end-game text and a restart button for all endings.
-
-Polish: Add a title screen that says "LOST ON KEPLER-442b" before the first scene. Style choice buttons with hover effects (color change, scale up). Add a quiet sci-fi ambient sound in the background. Make choice buttons "pop" with a click sound when pressed. Use different colors for different choice types (green = safe, red = danger, yellow = unknown).</div>
-                
-                <p style="margin-top: 20px;"><strong>Copy and paste this entire block.</strong> Feel free to change the theme (fantasy quest, escape room, detective mystery, etc.)</p>
-            </div>
-        </div>
-        
-        <!-- PAGE 9: YOU'RE DONE -->
-        <div class="content">
-            <h2>You Now Know Everything You Need</h2>
-            
-            <div class="summary-box">
-                <p><strong>✓</strong> The 4 magic lines (set expectations every time)</p>
-                <p><strong>✓</strong> Be ridiculously specific (weird is good)</p>
-                <p><strong>✓</strong> Add upgrades and progression (make it addictive)</p>
-                <p><strong>✓</strong> Juice it up (make it feel alive)</p>
-                <p><strong>✓</strong> Be surgical with fixes (iterate, don't rewrite)</p>
-                <p><strong>✓</strong> What NOT to ask for (avoid the traps)</p>
-                <p><strong>✓</strong> How to use starter templates (copy, paste, customize)</p>
-            </div>
-            
-            <p style="margin-top: 30px; font-size: 1.1em;"><strong>You're equipped to build unlimited games.</strong></p>
-            
-            <p style="margin-top: 20px;">Go back to Module 2. Pick a game idea. Write a prompt using these principles. Paste it into your AI of choice. Hit send.</p>
-            
-            <p style="margin-top: 20px;">Test it. Refine it. Ship it on itch.io.</p>
-            
-            <p style="margin-top: 20px; color: #667eea; font-weight: bold;">The games you build from here on are real.</p>
-        </div>
-        
-        <div class="nav-buttons">
-            <button onclick="prevPage()" id="prev-btn">← Previous</button>
-            <button onclick="nextPage()" id="next-btn">Next →</button>
-            <a href="index.html" id="complete-btn" class="button" style="display: none;" onclick="completeModule(3)">Complete Module</a>
-        </div>
+      <div class="nav-buttons">
+        <button onclick="prevPage()" id="prev-btn">← Previous</button>
+        <button onclick="nextPage()" id="next-btn">Next →</button>
+        <a
+          href="index.html"
+          id="complete-btn"
+          class="button"
+          style="display: none"
+          onclick="completeModule(3)"
+          >Complete Module</a
+        >
+      </div>
     </div>
-    
+
     <script>
-        let currentPage = 0;
-        const totalPages = 9;
-        
-        function updatePage() {
-            const pages = document.querySelectorAll('.content');
-            const header = document.querySelector('.header');
+      let currentPage = 0;
+      const totalPages = 9;
 
-            pages.forEach((p, i) => {
-                p.classList.remove('active');
-                if (i === currentPage) {
-                    p.classList.add('active');
-                }
-            });
+      function updatePage() {
+        const pages = document.querySelectorAll(".content");
+        const header = document.querySelector(".header");
 
-            if (currentPage !== 0) {
-                header.style.display = 'none';
-            } else {
-                header.style.display = 'block';
-            }
-            
-            document.getElementById('prev-btn').disabled = currentPage === 0;
-            
-            if (currentPage === totalPages - 1) {
-                document.getElementById('next-btn').style.display = 'none';
-                document.getElementById('complete-btn').style.display = 'inline-block';
-            } else {
-                document.getElementById('next-btn').style.display = 'inline-block';
-                document.getElementById('complete-btn').style.display = 'none';
-            }
-            
-            const progressPercent = ((currentPage + 1) / totalPages) * 100;
-            document.querySelector('.progress-fill').style.width = progressPercent + '%';
-            window.scrollTo(0, 0);
+        pages.forEach((p, i) => {
+          p.classList.remove("active");
+          if (i === currentPage) {
+            p.classList.add("active");
+          }
+        });
+
+        if (currentPage !== 0) {
+          header.style.display = "none";
+        } else {
+          header.style.display = "block";
         }
-        
-        function nextPage() {
-            if (currentPage < totalPages - 1) {
-                currentPage++;
-                updatePage();
-            }
+
+        document.getElementById("prev-btn").disabled = currentPage === 0;
+
+        if (currentPage === totalPages - 1) {
+          document.getElementById("next-btn").style.display = "none";
+          document.getElementById("complete-btn").style.display =
+            "inline-block";
+        } else {
+          document.getElementById("next-btn").style.display = "inline-block";
+          document.getElementById("complete-btn").style.display = "none";
         }
-        
-        function prevPage() {
-            if (currentPage > 0) {
-                currentPage--;
-                updatePage();
-            }
+
+        const progressPercent = ((currentPage + 1) / totalPages) * 100;
+        document.querySelector(".progress-fill").style.width =
+          progressPercent + "%";
+        window.scrollTo(0, 0);
+      }
+
+      function nextPage() {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          updatePage();
         }
-        
-        function completeModule(moduleNumber) {
-            localStorage.setItem('module' + moduleNumber + '_completed', 'true');
+      }
+
+      function prevPage() {
+        if (currentPage > 0) {
+          currentPage--;
+          updatePage();
         }
-        
-        function switchTab(event, tabId) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Remove active from all buttons
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected tab and mark button as active
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+      }
+
+      function completeModule(moduleNumber) {
+        localStorage.setItem("module" + moduleNumber + "_completed", "true");
+      }
+
+      function switchTab(event, tabId) {
+        // Hide all tabs
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab) => tab.classList.remove("active"));
+
+        // Remove active from all buttons
+        const buttons = document.querySelectorAll(".tab-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+
+        // Show selected tab and mark button as active
+        document.getElementById(tabId).classList.add("active");
+        event.target.classList.add("active");
+      }
+
+      function toggleAccordion(el) {
+        const accordion = el.closest(".accordion");
+        const allItems = accordion.querySelectorAll(".accordion-item");
+
+        allItems.forEach((item) => {
+          if (item !== el) {
+            item.classList.remove("active");
+          }
+        });
+
+        el.classList.toggle("active");
+      }
+
+      function openModal(id) {
+        document.getElementById(id).classList.add("active");
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("active");
+      }
+
+      window.onclick = function (event) {
+        if (event.target.classList.contains("modal")) {
+          event.target.classList.remove("active");
         }
-        
-        function toggleAccordion(el) {
-            const accordion = el.closest('.accordion');
-            const allItems = accordion.querySelectorAll('.accordion-item');
-            
-            allItems.forEach(item => {
-                if (item !== el) {
-                    item.classList.remove('active');
-                }
-            });
-            
-            el.classList.toggle('active');
-        }
-        
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-        
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-        
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('active');
-            }
-        }
-        
-        updatePage();
+      };
+
+      updatePage();
     </script>
-</body>
+  </body>
 </html>
