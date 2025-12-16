@@ -46,7 +46,7 @@
       }
 
       .content {
-        padding: 40px;
+        padding: 40px 40px 10px 40px;
         min-height: 500px;
         display: none;
       }
@@ -91,7 +91,7 @@
         background: #f0f4ff;
         border-left: 4px solid #667eea;
         padding: 20px;
-        margin: 25px 0;
+        margin: 25px 0 10px 0;
         border-radius: 6px;
       }
 
@@ -243,6 +243,11 @@
         font-size: 0.95em;
         line-height: 1.8;
         color: #333;
+      }
+
+      .accordion-content ul {
+        padding-left: 35px;
+        font-size: 0.95em;
       }
 
       .accordion-content p:first-child {
@@ -787,7 +792,7 @@
         </p>
         <p>
           Everything you build at first lives in <strong>one file</strong>:
-          <code>game.html</code>
+          <code>index.html</code>
         </p>
 
         <div class="info-button-group">
@@ -800,7 +805,12 @@
         <img
           src="images/how-to-run.jpg"
           alt="How to run a game"
-          style="width: 100%; border-radius: 8px; margin-top: 15px"
+          style="
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+            padding: 0% 10%;
+          "
         />
 
         <div class="highlight-box">
@@ -1362,10 +1372,10 @@ my-game/
             </div>
             <div class="accordion-content">
               <p>If your game is just one file (no sounds, graphics, etc.):</p>
-              <p style="margin-top: 10px">
-                • Upload just the .HTML file directly to itch.io
-              </p>
-              <p>• Players can click "Play in Browser" instantly</p>
+              <ul>
+                <li>Upload just the .HTML file directly to itch.io</li>
+                <li>Players can click "Play in Browser" instantly</li>
+              </ul>
             </div>
           </div>
 
@@ -1376,13 +1386,15 @@ my-game/
             </div>
             <div class="accordion-content">
               <p>If your game has a folder structure (sounds, images, etc.):</p>
-              <p style="margin-top: 10px">
-                • Right-click the my-game folder → "Compress" or "Send to →
-                Compressed (.zip) folder"
-              </p>
-              <p>• Name it my-game.zip</p>
-              <p>• Upload to itch.io</p>
-              <p>• Players download and extract, then open index.html</p>
+              <ul>
+                <li>
+                  Right-click the my-game folder → "Compress" or "Send to →
+                  Compressed (.zip) folder"
+                </li>
+                <li>Name it my-game.zip</li>
+                <li>Upload to itch.io</li>
+                <li>Players can access it right from their browser</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1410,10 +1422,6 @@ my-game/
               progression
             </div>
             <div class="workflow-step">Play through the entire game once</div>
-            <div class="workflow-step">
-              Check file paths (make sure &lt;img src="images/player.png"&gt;
-              actually works)
-            </div>
           </div>
 
           <div class="note-box">
