@@ -500,6 +500,7 @@
         display: flex;
         gap: 10px;
         margin-bottom: 15px;
+        margin-top: 0px;
         border-bottom: 2px solid #e0e0e0;
       }
 
@@ -526,7 +527,7 @@
 
       .mushroom-tabs .tab-content {
         display: none;
-        padding: 25px;
+        padding: 0px 10px;
         background: white;
         border-radius: 8px;
         border: 2px solid #667eea;
@@ -801,16 +802,24 @@
           Before you worry about folders, version control, or IDEs—you need to
           understand the simplest possible setup.
         </p>
-        <p>
-          Everything you build at first lives in <strong>one file</strong>:
-          <code>index.html</code>
-        </p>
-
-        <div class="info-button-group">
-          <p><strong>Why One File?</strong></p>
-          <button class="info-btn" onclick="openModal('modal-why-one-file')">
-            Learn More
-          </button>
+        <div class="flex">
+          <div>
+            <p>
+              Everything you build at first lives in <strong>one file</strong>:
+              <code>index.html</code>
+            </p>
+          </div>
+          <div>
+            <div class="info-button-group">
+              <p><strong>Why One File?</strong></p>
+              <button
+                class="info-btn"
+                onclick="openModal('modal-why-one-file')"
+              >
+                Learn More
+              </button>
+            </div>
+          </div>
         </div>
 
         <img
@@ -822,9 +831,9 @@
         <div class="highlight-box">
           <p>
             <strong>Example:</strong> If you ask the AI "Make a clicking game
-            where you click a big donut to earn points," it gives you back one
-            complete HTML file with all CSS and JavaScript built-in. You copy,
-            save, open. Done.
+            where you click a big donut to earn points - html/js all in a single
+            file," it gives you back one complete HTML file with all CSS and
+            JavaScript built-in. You copy, save, open, and play! Easy.
           </p>
         </div>
       </div>
@@ -872,24 +881,35 @@
         <h2>The Rapid Iteration Workflow</h2>
         <p>
           The real power of AI isn't getting one perfect game—it's getting
-          something playable, then refining it in seconds.
+          something playable, then refining it.
         </p>
 
-        <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
-          The Loop:
-        </h3>
         <img
           src="images/the-loop.jpg"
           alt="The Loop"
-          style="width: 100%; border-radius: 8px; margin-top: 15px"
+          style="width: 100%; border-radius: 8px"
         />
 
         <h3 style="color: #667eea; margin-top: 30px; font-size: 1.3em">
           🎮 Real Example: The Mushroom Clicker
         </h3>
-        <p>
-          Click through the four prompts to see how a game evolves in 5 minutes:
-        </p>
+        <div class="flex">
+          <div>
+            <p>
+              Click through the three prompts to see how a game evolves in just
+              a few minutes:
+            </p>
+          </div>
+          <div style="margin-left: 20px">
+            <button
+              class="info-btn"
+              onclick="openModal('modal-key-insight')"
+              style="margin-left: 0"
+            >
+              Why this Works
+            </button>
+          </div>
+        </div>
 
         <div class="mushroom-tabs">
           <div class="tab-buttons">
@@ -911,12 +931,6 @@
             >
               Prompt 3
             </button>
-            <button
-              class="tab-btn"
-              onclick="switchMushroomTab(event, 'mushroom-prompt-4')"
-            >
-              Prompt 4
-            </button>
           </div>
 
           <div id="mushroom-prompt-1" class="tab-content active">
@@ -928,8 +942,8 @@
             </div>
             <div class="result-text">
               <span class="result-label">Result:</span>
-              You get a working game. It works, but the mushrooms don't move
-              around—they're in the same spot every time. Boring.
+              You get a working game but the mushrooms don't move around—they're
+              in the same spot every time. Boring.
             </div>
           </div>
 
@@ -942,47 +956,24 @@
             </div>
             <div class="result-text">
               <span class="result-label">Result:</span>
-              Now it's more fun. But it's too easy. You're clicking mushrooms
-              faster than they appear.
+              Now it's more fun. But it's still too easy and you don't have a
+              clear goal.
             </div>
           </div>
 
           <div id="mushroom-prompt-3" class="tab-content">
             <div class="prompt-item">
               <strong>Next Prompt:</strong>
-              "Increase the spawn rate so new mushrooms appear faster. Make the
-              game slightly harder by adding a time limit—the player has 30
-              seconds."
+              "Add a time limit—the player has 30 seconds and put the text
+              'click as many as you can before time runs out' as a starting
+              popup before the game starts."
             </div>
             <div class="result-text">
               <span class="result-label">Result:</span>
-              Better. But now you realize there's no feedback when time runs
-              out. One more fix needed.
+              Better. Now you have a reason to play, instuctions on what to do,
+              and a challenge.
             </div>
           </div>
-
-          <div id="mushroom-prompt-4" class="tab-content">
-            <div class="prompt-item">
-              <strong>Final Prompt:</strong>
-              "When the time runs out, show a big 'GAME OVER' message with the
-              final score. Add a restart button."
-            </div>
-            <div class="result-text">
-              <span class="result-label">Result:</span>
-              Done. Four prompts. Five minutes. A playable clicker game.
-            </div>
-          </div>
-        </div>
-
-        <div class="info-button-group">
-          <p><strong>Why This Works:</strong></p>
-          <button
-            class="info-btn"
-            onclick="openModal('modal-key-insight')"
-            style="margin-left: 0"
-          >
-            See Key Insight →
-          </button>
         </div>
       </div>
 
@@ -998,11 +989,12 @@
             asking it to fix <strong>one specific thing</strong>.
           </p>
           <p style="margin-top: 15px">
-            This is fast and keeps the AI from breaking what already works.
+            This is fast and keeps the focused on one problem at a time, meaning
+            it's less likely to break something unrelated.
           </p>
           <p style="margin-top: 15px">
             Surgical fixes. Focused iterations. That's how you go from "nothing"
-            to "polished" in minutes.
+            to "fun" in minutes.
           </p>
         </div>
       </div>
@@ -1019,15 +1011,14 @@
           <div class="flip-card">
             <div class="flip-card-inner">
               <div class="flip-card-front">
-                ❌ "Rewrite my entire game with this new feature"
+                ❌ "Add 10 more levels with different features."
                 <div class="flip-hint">Hover to flip</div>
               </div>
               <div class="flip-card-back">
-                ✅ "Add a pause button. When the player presses P, the game
-                pauses and shows 'PAUSED'. Press P again to resume."
+                ✅ "Add another level with platforms to jump to."
                 <br /><br />
-                <strong>Why:</strong> Asking for a complete rewrite risks
-                breaking things that already work. Be surgical.
+                <strong>Why:</strong> Asking for big expansions without specific
+                details risks confusing the AI.
               </div>
             </div>
           </div>
@@ -1042,8 +1033,8 @@
                 ✅ "The game feels too easy. Make enemies spawn twice as fast
                 and move 20% faster."
                 <br /><br />
-                <strong>Why:</strong> "Better" is vague. The AI doesn't know if
-                you mean faster, harder, prettier, or more exciting. Be
+                <strong>Why:</strong> "Better" is too vague. The AI doesn't know
+                if you mean faster, harder, prettier, or more exciting. Be
                 specific.
               </div>
             </div>
@@ -1073,8 +1064,8 @@
               >The best prompts are specific, surgical, and focused on one
               problem at a time.</strong
             >
-            Vague = wasted time. Surgical fixes = fast progress.
           </p>
+          <p>Vague = wasted time. Surgical fixes = fast progress.</p>
         </div>
       </div>
 
@@ -1180,35 +1171,13 @@
               </p>
             </div>
           </div>
-
-          <div class="accordion-item" onclick="toggleAccordion(this)">
-            <div class="accordion-header">
-              🎮 UI Elements (Buttons, Menus, Borders)
-              <span class="accordion-icon">▼</span>
-            </div>
-            <div class="accordion-content">
-              <p>
-                <strong>Where:</strong> itch.io asset packs OR generate them
-                with AI
-              </p>
-              <p>
-                <strong>How:</strong> Search for "UI pack" or ask an AI to
-                generate buttons/menus
-              </p>
-              <p><strong>Format:</strong> PNG</p>
-              <p>
-                <strong>Tip:</strong> Consistent UI makes games feel
-                professional. Pick one style and stick with it
-              </p>
-            </div>
-          </div>
         </div>
 
         <div class="highlight-box">
           <p>
             <strong>Start with quick assets.</strong> Once your game is polished
             and you know what you need, you can work on making higher quality
-            custom art. For now, good-enough assets let you focus on gameplay.
+            custom art. For now, good-enough let you focus on gameplay.
           </p>
         </div>
       </div>
@@ -1289,8 +1258,7 @@ my-game/
             Drag asset files into their matching folders
           </div>
           <div class="workflow-step">
-            In your HTML, reference files like:
-            <code>&lt;img src="images/player.png"&gt;</code>
+            Tell the AI which folder your files are in so it can use them
           </div>
         </div>
 
@@ -1347,11 +1315,13 @@ my-game/
           </p>
           <ul style="margin-top: 15px">
             <li>
-              <strong>Music:</strong> 3-10MB per track (use MP3 compression)
+              <strong>Music:</strong> 3-10MB per track (use online MP3
+              compression tools)
             </li>
             <li><strong>Sound effects:</strong> 100KB-1MB each</li>
             <li>
-              <strong>Images:</strong> 500KB-2MB each (use PNG compression)
+              <strong>Images:</strong> 500KB-2MB each (use online PNG
+              compression tools)
             </li>
           </ul>
           <p style="margin-top: 15px">
@@ -1377,9 +1347,15 @@ my-game/
               <span class="accordion-icon">▼</span>
             </div>
             <div class="accordion-content">
-              <p>If your game is just one file (no sounds, graphics, etc.):</p>
+              <p>
+                If your game is just one file (no outside sounds, graphics,
+                etc.):
+              </p>
               <ul>
-                <li>Upload just the .HTML file directly to itch.io</li>
+                <li>
+                  Just upload ust the .HTML file directly to a platform like
+                  itch.io
+                </li>
                 <li>Players can click "Play in Browser" instantly</li>
               </ul>
             </div>
@@ -1393,13 +1369,10 @@ my-game/
             <div class="accordion-content">
               <p>If your game has a folder structure (sounds, images, etc.):</p>
               <ul>
-                <li>
-                  Right-click the my-game folder → "Compress" or "Send to →
-                  Compressed (.zip) folder"
-                </li>
+                <li>Right-click the my-game folder → "Compress to ZIP"</li>
                 <li>Name it my-game.zip</li>
-                <li>Upload to itch.io</li>
-                <li>Players can access it right from their browser</li>
+                <li>Upload to to a platform like itch.io</li>
+                <li>Players can still click "Play in Browser" instantly</li>
               </ul>
             </div>
           </div>
@@ -1454,7 +1427,9 @@ my-game/
             <div class="workflow-step">Name your game, write a description</div>
             <div class="workflow-step">Choose "HTML" as the game type</div>
             <div class="workflow-step">Upload your file or .zip folder</div>
-            <div class="workflow-step">Set it to "Public"</div>
+            <div class="workflow-step">
+              Set it to "Public" and "Play in Broswer"
+            </div>
             <div class="workflow-step">Share the link</div>
           </div>
 
